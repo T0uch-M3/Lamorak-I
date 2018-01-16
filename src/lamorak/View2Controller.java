@@ -5,17 +5,18 @@
  */
 package lamorak;
 
+import javafx.scene.layout.AnchorPane;
+import javafx.event.ActionEvent;
 /**
  *
  * @author Touch-Me
  */
-public class Lamorak {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
+public class View2Controller extends AnchorPane {
+    
+    
+    public void ConfirmAction (ActionEvent event) throws Exception {
+        Main m = new Main();
+        m.goto2();
     }
     
 }
