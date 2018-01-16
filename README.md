@@ -1,2 +1,0 @@
-# Lamorak-I
-Internship project 
