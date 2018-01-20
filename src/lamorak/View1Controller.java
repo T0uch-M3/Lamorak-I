@@ -29,17 +29,22 @@ public class View1Controller extends AnchorPane implements Initializable{
     
     PreparedStatement st = null;
     String sql2 = "SELECT * FROM EMPLOYEE";
+    String sql3 = "UPDATE EMPLOYEE SET VIP = true WHERE ID = '4'";
     ArrayList<String> store = new ArrayList<>();
     @FXML
     private TextField name;
     private PasswordField password;
+    
     @FXML
     private void ConfirmAction (ActionEvent event) throws Exception{
         try {
+            
         Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/Project","Test","test");
             System.out.println("Connected");
             st = con.prepareStatement(sql2);
             ResultSet result = st.executeQuery();
+                     //int count = st.executeUpdate();
+                     //System.out.println(count);
             while(result.next()) {
              if ((result.getBoolean(3)==true)&&(result.getString(2).equals(name.getText()))) 
                  //store.add(result.getString(2));
@@ -60,6 +65,7 @@ public class View1Controller extends AnchorPane implements Initializable{
             Logger.getLogger(View1Controller.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             st.close();
+            System.out.println("Finally!!!");
         }
     }
     
@@ -70,7 +76,12 @@ public class View1Controller extends AnchorPane implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources)  {
-//        String sql1 = "INSERT INTO EMPLOYEE"
+        
+        
+        
+        try {
+            name.setText("Lakyus");
+//                     String sql1 = "INSERT INTO EMPLOYEE"
 //				+ "(ID, NAME, VIP, PWD) VALUES"
 //				+ "(?,?,?,?)";
 //        //String sql2 = "SELECT * FROM EMPLOYEE";
@@ -103,6 +114,12 @@ public class View1Controller extends AnchorPane implements Initializable{
 //                Logger.getLogger(View1Controller.class.getName()).log(Level.SEVERE, null, ex);
 //            }
 //        }
+        } catch (Exception ex) {
+            
+            Logger.getLogger(View1Controller.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            System.out.println("NOt CONNECTED");
+        }
     }
     
 }

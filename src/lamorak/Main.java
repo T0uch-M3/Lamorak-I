@@ -30,7 +30,7 @@ public class Main extends Application {
         stage.setTitle("Lamorak");
         stage.setMinWidth(700);
         stage.setMinHeight(500);
-        Parent root = FXMLLoader.load(getClass().getResource("View1.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("View2N.fxml"));
         Scene scene = new Scene(root);
         stage.setResizable(false);               
         stage.setScene(scene);
@@ -38,7 +38,11 @@ public class Main extends Application {
     }
     
     public void goto2() throws Exception{
-        Parent pane = FXMLLoader.load(getClass().getResource("View2.fxml"));
+        Parent pane = FXMLLoader.load(getClass().getResource("View2N.fxml"));
+        stage.getScene().setRoot(pane);
+    }
+    public void goto1() throws Exception{
+        Parent pane = FXMLLoader.load(getClass().getResource("View1.fxml"));
         stage.getScene().setRoot(pane);
     }
 }

@@ -6,6 +6,9 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 
+<?import javafx.embed.swing.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -15,10 +18,32 @@ and open the template in the editor.
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lamorak.View2Controller">
    <children>
-      <Label ellipsisString="" layoutX="181.0" layoutY="28.0" mouseTransparent="true" prefHeight="122.0" prefWidth="224.0" stylesheets="@Style.css" text="DONE" textAlignment="CENTER">
+      <Label fx:id="label1" ellipsisString="" layoutX="200.0" layoutY="25.0" mouseTransparent="true" prefHeight="122.0" prefWidth="224.0" stylesheets="@Style.css" text="DONE" textAlignment="CENTER">
          <font>
             <Font name="Harrington" size="42.0" />
          </font>
       </Label>
+      <TextField fx:id="fieldID" layoutX="201.0" layoutY="175.0" />
+      <TextField fx:id="fieldNAME" layoutX="201.0" layoutY="225.0" />
+      <CheckBox fx:id="checkVIP" layoutX="239.0" layoutY="270.0" mnemonicParsing="false" onAction="#CheckAction" text="CheckBox" />
+      <TextField fx:id="fieldPWD" layoutX="201.0" layoutY="304.0" />
+      <Button fx:id="sub" layoutX="250.0" layoutY="358.0" mnemonicParsing="false" onAction="#submitAction" text="Submit" />
+      <Label layoutX="69.0" layoutY="179.0" text="ID" />
+      <Label layoutX="69.0" layoutY="229.0" text="Name" />
+      <Label layoutX="69.0" layoutY="308.0" text="Password" />
+      <Label layoutX="69.0" layoutY="270.0" text="Check if VIP" />
+      <Button fx:id="backb" layoutX="17.0" layoutY="361.0" mnemonicParsing="false" onAction="#backAction" text="Back" />
+      <Button fx:id="debug" layoutX="439.0" layoutY="136.0" mnemonicParsing="false" onAction="#debugAction" text="DEBUG" />
+      <TableView fx:id="tt" layoutX="340.0" layoutY="13.0" prefHeight="117.0" prefWidth="246.0">
+        <columns>
+          <TableColumn fx:id="C1" prefWidth="45.66668701171875" text="C1" />
+          <TableColumn fx:id="C2" prefWidth="63.33331298828125" text="C2" />
+            <TableColumn fx:id="C3" prefWidth="70.33331298828125" text="C3" />
+            <TableColumn fx:id="C4" prefWidth="75.0" text="C4" />
+        </columns>
+      </TableView>
+      <Button layoutX="489.0" layoutY="233.0" mnemonicParsing="false" text="Button" />
+      <TilePane fx:id="tp" layoutX="8.0" layoutY="4.0" prefHeight="168.0" prefWidth="200.0" />
+      <TitledPane animated="false" layoutX="365.0" layoutY="283.0" text="untitled" />
    </children>
 </AnchorPane>
