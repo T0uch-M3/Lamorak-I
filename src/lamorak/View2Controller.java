@@ -5,6 +5,7 @@
  */
 package lamorak;
 
+import com.mysql.fabric.xmlrpc.base.Value;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.Date;
@@ -20,6 +21,7 @@ import java.time.LocalTime;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAmount;
 import java.util.Calendar;
+import java.lang.Math;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,13 +49,16 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import java.time.*;
+import java.util.Formatter;
+import javafx.scene.control.Tooltip;
+import javafx.scene.input.ScrollEvent;
 /**
  *
  * @author Touch-Me
  */
 public class View2Controller extends TabPane implements Initializable{
     @FXML
-    private Label label1, labPM, labDATE;
+    private Label label1, labPM, labDATE, labY, labM, labD;
     @FXML
     private TableView tt;
     @FXML
@@ -74,18 +79,17 @@ public class View2Controller extends TabPane implements Initializable{
     private VBox matVBOX;
     @FXML
     private Tab t2,t1;
+
     
 
     //***********************DATABASE************************
-    
-    String sql = "insert into EMPLOYEE"
-                +"(ID, NAME, VIP, PWD, INDATE, GENDER) values"
-                +"(?,?,?,?,?,?)";
+    int D,Y,M;
+    int i=0;
     PreparedStatement st = null; 
     Connection cn;
     //********************SPINNERS*****************************
-    SpinnerValueFactory svf1;
-    SpinnerValueFactory svf2;
+    SpinnerValueFactory svf1, svf2, svf21, svf22;
+    int svm, svM;
     //************Radio Buttons*******************************
     ToggleGroup tg = new ToggleGroup();
     RadioButton rb2 = new RadioButton("2 Months");
@@ -101,6 +105,9 @@ public class View2Controller extends TabPane implements Initializable{
     @FXML
     public void submitAction (ActionEvent event){
         try {
+            String sql = "insert into EMPLOYEE"
+            +"(ID, NAME, VIP, PWD, INDATE, GENDER, MONVAC, LASTUPDATE) values"
+            +"(?,?,?,?,?,?,?,?)";
             st = cn.prepareStatement(sql);
             st.setString(1,fieldID.getText());
             st.setString(2,fieldNAME.getText());
@@ -108,11 +115,10 @@ public class View2Controller extends TabPane implements Initializable{
             st.setString(4,fieldPWD.getText());
             st.setDate(5, Date.valueOf(fieldDATE.getValue()));
             st.setString(6, fm.getValue().toString());
-//            st.setString(1,"5");
-//            st.setString(2,"testNAME");
-//            st.setBoolean(3,false);
-//            st.setString(4,"4444");
-                 st.executeUpdate();
+            int d = diffBetween(fieldDATE.getValue(), LocalDate.now());
+            st.setInt(7, d);
+            st.setDate(8, Date.valueOf(LocalDate.now()));
+            st.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(View2Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -128,7 +134,9 @@ public class View2Controller extends TabPane implements Initializable{
     }
     //*************************************************************
     @FXML
-    private void debugAction(MouseEvent me){
+    private void debugAction(ScrollEvent me){
+        
+        System.out.println(svf2.getValue());
 //        SpinnerValueFactory svf1 = sp1.getValueFactory();
 //        System.out.println(svf.getValue());
 //            System.out.println("Dbu(^O^)ugg");
@@ -139,11 +147,7 @@ public class View2Controller extends TabPane implements Initializable{
 //           tt.setItems(value);
 //           C1.setCellValueFactory(new PropertyValueFactory<Object,String>("TEST"));
     }
-//    @FXML
-//    private void t2Action(ActionEvent event){
-//        //System.out.println(tt.getClass());
-//        System.out.println("zzzzzz");
-//    }
+
     //********************THIRD*TAB*************************************
     @FXML
     private void fetchAction(KeyEvent ke) throws SQLException{
@@ -159,14 +163,37 @@ public class View2Controller extends TabPane implements Initializable{
             fieldPWDc.setText(result.getString(4));
             labDATE.setText(result.getDate(5).toString());
             svf1.setValue(result.getInt(8));
-            svf2.setValue(result.getInt(10));
+            monthSpin(result.getInt(10));
+            svf2.setValue(0);
+            svf21.setValue(0);
+            svf22.setValue(0);
             if (result.getInt(6)!=2)
                 matBox.setSelected(false);
             else
                 matBox.setSelected(true);
             InitRadioButton(result.getInt(7));
             
+            
         }
+    }
+    private void monthSpin(int i){
+        int d=0,m=0,y=0,t1=6,t2=2,t;
+            if (i > 24){
+                d = i/24;//counter when u get float result
+                if (d>30){
+                    m = d/30;
+                    d = d-m*30;
+                    if (m>12){
+                        y = m/12;
+                        m = m-y*12;
+                    }
+                }
+            }     
+        System.out.println("d "+d+" m "+m+" y "+y);
+        D=d;M=m;Y=y;
+        labD.setText(String.valueOf(d));
+        labM.setText(String.valueOf(m));
+        labY.setText(String.valueOf(y));
     }
     @FXML
     private void updateAction(ActionEvent event) throws SQLException{
@@ -238,64 +265,121 @@ public class View2Controller extends TabPane implements Initializable{
                 }
         }
     }
-    //*************************************************************
     @FXML
-    private Spinner SetupSpinner1(int x, boolean y,int a, int b){
-        //***x-->init value****y-->editable or NO****a-->MIN****b-->MAX****i-->ID**
-        svf1 =  new SpinnerValueFactory.IntegerSpinnerValueFactory(a,b);
-        Spinner sp = new Spinner();
-        svf1.valueProperty().set(x);
-        sp.setValueFactory(svf1);
-        sp.getStyleClass().add(Spinner.STYLE_CLASS_ARROWS_ON_RIGHT_HORIZONTAL);
-        sp.setPrefWidth(80);
-        sp.setEditable(y);
-        return sp;
-    }
-    //**********************************************************
-    private LocalDate diffBetween (LocalDate ld, LocalDate ld2){
-       //*****************************ld-->old*******ld2-->new**
-        int y = ld.getYear();
-        int m = ld.getMonth().getValue();
-        int d = ld.getDayOfMonth();
-        //subtract year, month, day from new date (ld2) 
-        LocalDate ld3 = ld2.minusYears(y).minusMonths(m).minusDays(d);
-        return ld3;
-    }
-    private int countDays(LocalDate ld){
-        int y = ld.getYear();
-        int m = ld.getMonthValue();
-        int d = ld.getDayOfMonth();
-        int yd = 365*y;
-        int md = 30*m;
-        int dd = d;
-        int cc = yd+md+dd;
-        return cc;
+    private SpinnerValueFactory spinnerVF (int a, int b){
+        svf1 = new SpinnerValueFactory.IntegerSpinnerValueFactory(a,b);
+        return svf1;
     }
     @FXML
     private Spinner SetupSpinner2(int x, boolean y,int a, int b){
+        
         //***x-->init value****y-->editable or NO****a-->MIN****b-->MAX****i-->ID**
         svf2 =  new SpinnerValueFactory.IntegerSpinnerValueFactory(a,b);
         Spinner sp = new Spinner();
         svf2.valueProperty().set(x);
         sp.setValueFactory(svf2);
-        sp.getStyleClass().add(Spinner.STYLE_CLASS_ARROWS_ON_RIGHT_HORIZONTAL);
-        sp.setPrefWidth(80);
+        sp.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_VERTICAL);
+        sp.setPrefWidth(32);
+        
+        sp.setOnMouseClicked((MouseEvent event)->{
+            Integer inB = new Integer(labD.getText());
+            Integer inSP = new Integer(String.valueOf(sp.getValue()));
+            if (inB>0){
+                labD.setText(String.valueOf(inSP+inB+i));
+                inB++;
+                i++;
+                System.out.println("inB"+inB);
+            }
+            if(inB==0){
+             svf2.setValue(inB);
+//                sp.setValueFactory(svf1);
+            }
+        });
         sp.setEditable(y);
         return sp;
     }
-    private void querryDate () throws SQLException{
-        String sqlDATE = "select INDATE from EMPLOYEE where id = '4444'";
+    @FXML
+    private Spinner SetupSpinner21(int x, boolean y,int a, int b){
+        //***x-->init value****y-->editable or NO****a-->MIN****b-->MAX****i-->ID**
+        svf21 =  new SpinnerValueFactory.IntegerSpinnerValueFactory(a,b);
+        Spinner sp = new Spinner();
+        svf21.valueProperty().set(x);
+        sp.setValueFactory(svf21);
+        sp.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_VERTICAL);
+        sp.setPrefWidth(32);
+        sp.setEditable(y);
+        return sp;
+    }
+    @FXML
+    private Spinner SetupSpinner22(int x, boolean y,int a, int b){
+        //***x-->init value****y-->editable or NO****a-->MIN****b-->MAX****i-->ID**
+        svf22 =  new SpinnerValueFactory.IntegerSpinnerValueFactory(a,b);
+        Spinner sp = new Spinner();
+        svf22.valueProperty().set(x);
+        sp.setValueFactory(svf22);
+        sp.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_VERTICAL);
+        sp.setPrefWidth(32);
+        sp.setEditable(y);
+        return sp;
+    }
+    //*************************************************************
+    @FXML
+    private Spinner SetupSpinner1(int x, boolean y,SpinnerValueFactory svf){
+        //***x-->init value****y-->editable or NO****a-->MIN****b-->MAX****i-->ID**
+//        svf1 =  new SpinnerValueFactory.IntegerSpinnerValueFactory(a,b);
+        
+        Spinner sp = new Spinner();
+        svf.valueProperty().set(x);
+        sp.setValueFactory(svf);
+        sp.getStyleClass().add(Spinner.STYLE_CLASS_ARROWS_ON_RIGHT_HORIZONTAL);
+        sp.setPrefWidth(80);
+        Tooltip ttip = new Tooltip("THIS the 6 day one");
+        sp.setTooltip(ttip);
+        sp.setOnMouseClicked((MouseEvent event)->{
+            System.out.println(svf.getValue());
+        });
+        sp.setEditable(y);
+        return sp;
+    }
+    //**********************************************************
+    private int diffBetween (LocalDate ld, LocalDate ld2){
+    //NOTPERFECT****************ld-->old*******ld2-->new**
+        int y = ld.getYear(), y2 = ld2.getYear();
+        int Y = (y2-y)*365;
+        
+        int m = ld.getMonthValue(), m2 = ld2.getMonthValue();
+        int M = (m2-m)*30;
+        
+        int d = ld.getDayOfMonth(), d2 = ld2.getDayOfMonth();
+        int D = d2-d;
+        
+        int CC = Y+M+D;
+        // return the difference in hours, 1 day = 2 hours
+        return CC*2;
+    }
+    private void updateVac(String id, int mv) throws SQLException{
+        String sqlUPDATE = "update EMPLOYEE set MONVAC = ? where ID = ?";
+        st = cn.prepareStatement(sqlUPDATE);
+        st.setInt(1, mv);
+        st.setString(2, id);
+        int exUpd = st.executeUpdate();
+    }
+    private void queryDate () throws SQLException{
+        //fetch all rows and update MONVAC
+        String sqlDATE = "select INDATE, ID from EMPLOYEE";
         st = cn.prepareStatement(sqlDATE);
         ResultSet result = st.executeQuery();
-        result.next();
-        System.out.println(result.getDate(1));
-        
-//        LocalDate ll = diffBetween(LocalDate.MIN, LocalDate.MIN)
+        while (result.next()){
+            LocalDate ld = result.getDate(1).toLocalDate();
+            int d = diffBetween(ld, LocalDate.now());
+            updateVac(result.getString(2),d);
+        }
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //********************Meat for dogs******************
         try {
+            
             cn = DriverManager.getConnection("jdbc:derby://localhost:1527/Project","Test","test");
         } catch (SQLException ex) {
             Logger.getLogger(View2Controller.class.getName()).log(Level.SEVERE, null, ex);
@@ -325,96 +409,17 @@ public class View2Controller extends TabPane implements Initializable{
         matVBOX.setSpacing(5);//=================VBOX for rBUTTons========
         matVBOX.getChildren().addAll(rb2,rb4,rb6);
         InitRadioButton(0);//==================Putting them in UI====================
-        //****3rd tab radio buttons***
-//        rad2.setToggleGroup(tg);
-//        rad4.setToggleGroup(tg);
-//        rad6.setToggleGroup(tg);
-//        if (rad2.isSelected())
-//            labPM.setText("2");
-//        if(rad4.isSelected())
-//            labPM.setText("4");
-//        if(rad6.isSelected())
-//            labPM.setText("6");
-//            String[] styles = {
-//            "spinner",  // defaults to arrows on right stacked vertically
-//            Spinner.STYLE_CLASS_ARROWS_ON_RIGHT_HORIZONTAL,
-//            Spinner.STYLE_CLASS_ARROWS_ON_LEFT_VERTICAL,
-//            Spinner.STYLE_CLASS_ARROWS_ON_LEFT_HORIZONTAL,
-//            Spinner.STYLE_CLASS_SPLIT_ARROWS_VERTICAL,
-//            Spinner.STYLE_CLASS_SPLIT_ARROWS_HORIZONTAL
-//        };
-// 
-        //TilePane tilePane = new TilePane();
-//        tp.setPrefColumns(6);     //preferred columns
-//        tp.setPrefRows(3);        //preferred rows
-//        tp.setHgap(20);
-//        tp.setVgap(30);
- 
-//        Pane root = new Pane();
-//        root.setMinSize(Pane.USE_PREF_SIZE, Pane.USE_PREF_SIZE);
-//        root.setMaxSize(Pane.USE_PREF_SIZE, Pane.USE_PREF_SIZE);
- 
-//        for (int i = 0; i < styles.length; i++) {
-//            /* Integer spinners */
-//            SpinnerValueFactory svf =
-//                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 99);
-//            Spinner sp = new Spinner();
-//            sp.setValueFactory(svf);
-//            sp.getStyleClass().add(styles[i]);
-//            sp.setPrefWidth(80);
-//            tp.getChildren().add(sp);
-//        }
-//         SpinnerValueFactory svf =
-//         new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 6);
-//         
-//         Spinner sp = new Spinner();
-        //*********THEHOLYGROUND*******************************
-//        try{
-//        String sqlDATE = "select INDATE from EMPLOYEE where id = 44";
-//        st = cn.prepareStatement(sqlDATE);
-//        ResultSet result = st.executeQuery();
-//        System.out.println(result.getDate(5));
-////        result.next();
-////        LocalDate ll = diffBetween(LocalDate.MIN, LocalDate.MIN)
-//                
-//        }catch(SQLException ex){
-//                    
-//        }
-
-//        
-//        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-////        format.setLenient(false);22-??
-//////        Date d = Date.valueOf("2018/01/01");
-//            Date dda = Date.valueOf("1996-11-16");
-////            Date ddr = Date.valueOf(LocalDate.now());
-////            Date ddz = Date.valueOf("1996-11-17");
-//            Date dde = Date.valueOf("2018-01-20");
-//            LocalDate lca = dda.toLocalDate();
-//            LocalDate lce = dde.toLocalDate();
-////            int x = dda.compareTo(ddz);
-////            boolean tes = ddz.after(dda);
-//            int y1 = lca.getYear();
-////            int y2 = lce.getYear();
-//            int m = lca.getMonth().getValue();
-//            int d = lca.getDayOfMonth();
-//            LocalDate lc1 = lce.minusYears(y1).minusMonths(m).minusDays(d);
-            
-//            Date ddx = Date.valueOf(lca);//********************************THHHHIS IS THE ONE FOR GOING BACK*********************************************
-//             Date ddf = ddr-dda;
-//            Date dd1 = Date.valueOf("2018/01/01");
-//            dd.setTime(2018-01-01);
-//            java.sql.Date dda = new Date(2018-05-11);
-//            countDays(lc1);
-//            
-//            System.out.println(countDays(lc1));
-        try {
-            querryDate();
-        } catch (SQLException ex) {
-            Logger.getLogger(View2Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
+       
         
-        tp6D.getChildren().add(SetupSpinner1(0, false, 0, 6));
-        tp1.getChildren().add(SetupSpinner2(0, true,0,999));
+        //================THEHOLYGROUND========================
+//        try {
+//            queryDate();
+//        } catch (SQLException ex) {
+//            Logger.getLogger(View2Controller.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+        //====================================================
+        tp6D.getChildren().add(SetupSpinner1(0, false, spinnerVF(0, 6)));
+        tp1.getChildren().addAll(SetupSpinner2(0, true,-999,0),SetupSpinner21(0, true,-999,0),SetupSpinner22(0, true,-999,0));
         //tpPM.getChildren().add(SetupSpinner(0, false, 0, 6));
         
     }
