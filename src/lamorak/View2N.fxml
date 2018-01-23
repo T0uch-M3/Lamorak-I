@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
@@ -21,7 +22,7 @@
                   <Label layoutX="449.0" layoutY="351.0" text="Password" />
                   <Label layoutX="78.0" layoutY="177.0" text="Name" />
                   <Label layoutX="94.0" layoutY="138.0" text="ID" />
-                  <Label fx:id="label1" ellipsisString="" layoutX="228.0" mouseTransparent="true" prefHeight="122.0" prefWidth="224.0" stylesheets="@Style.css" text="DONE" textAlignment="CENTER">
+                  <Label fx:id="label1" ellipsisString="" layoutX="2.0" mouseTransparent="true" prefHeight="122.0" prefWidth="684.0" stylesheets="@Style.css" text="DONE" textAlignment="CENTER">
                      <font>
                         <Font name="Harrington" size="42.0" />
                      </font>
@@ -32,13 +33,17 @@
                </children></AnchorPane>
       </content>
     </Tab>
-    <Tab fx:id="t2" text="Searching">
+    <Tab fx:id="t2" text="History">
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <Button fx:id="debug" layoutX="585.0" layoutY="48.0" mnemonicParsing="false" onAction="#debugAction" text="DEBUG" />
                   <Button fx:id="backb" layoutX="14.0" layoutY="421.0" mnemonicParsing="false" onAction="#backAction" text="Back" />
-                  <TableView fx:id="tt" layoutX="49.0" layoutY="86.0" prefHeight="200.0" prefWidth="486.0" />
+                  <TableView fx:id="tt" layoutX="49.0" layoutY="86.0" prefHeight="200.0" prefWidth="486.0">
+                     <columns>
+                        <TableColumn fx:id="colID" prefWidth="75.0" text="id" />
+                        <TableColumn fx:id="colReason" prefWidth="75.0" text="reason" />
+                     </columns></TableView>
+                  <Button fx:id="debug" layoutX="607.0" layoutY="53.0" mnemonicParsing="false" onAction="#debugAction" text="DEBUG" />
                </children></AnchorPane>
       </content>
     </Tab>
@@ -46,17 +51,20 @@
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <Button fx:id="upd" layoutX="498.0" layoutY="348.0" mnemonicParsing="false" onAction="#updateAction" text="Update" />
+                  <Button fx:id="upd" layoutX="498.0" layoutY="348.0" mnemonicParsing="false" onAction="#updateAction" text="Update">
+                     <tooltip>
+                        <Tooltip text="Empty Tooltip" />
+                     </tooltip></Button>
                   <TextField fx:id="fieldNAMEc" layoutX="498.0" layoutY="76.0" onMouseClicked="#nameOpen" />
                   <TextField fx:id="fieldIDc" layoutX="137.0" layoutY="76.0" onKeyPressed="#fetchAction" />
                   <PasswordField fx:id="fieldPWDc" layoutX="498.0" layoutY="144.0" onMouseClicked="#pwdOpen" />
-                  <TilePane fx:id="tp1" layoutX="170.0" layoutY="144.0" onMouseClicked="#debugAction" prefHeight="49.0" prefWidth="134.0" />
+                  <TilePane fx:id="tp1" layoutX="187.0" layoutY="153.0" onMouseClicked="#debugAction" prefHeight="64.0" prefWidth="101.0" />
                   <Label layoutX="43.0" layoutY="80.0" text="ID" />
                   <Label layoutX="35.0" layoutY="148.0" text="Monthly Vacation" />
                   <Label layoutX="410.0" layoutY="80.0" text="Name" />
                   <Label layoutX="410.0" layoutY="148.0" text="password" />
-                  <Label layoutX="35.0" layoutY="205.0" text="6 Days Vacation" />
-                  <TilePane fx:id="tp6D" layoutX="170.0" layoutY="197.0" prefHeight="32.0" prefWidth="97.0">
+                  <Label layoutX="35.0" layoutY="227.0" text="6 Days Vacation" />
+                  <TilePane fx:id="tp6D" layoutX="163.0" layoutY="220.0" prefHeight="32.0" prefWidth="97.0">
                      <padding>
                         <Insets top="6.0" />
                      </padding>
@@ -68,6 +76,15 @@
                   <VBox fx:id="matVBOX" layoutX="170.0" layoutY="318.0" prefHeight="115.0" prefWidth="93.0" />
                   <Label layoutX="381.0" layoutY="197.0" text="Registration date" />
                   <Label fx:id="labDATE" layoutX="558.0" layoutY="197.0" text="DATE" />
+                  <Label layoutX="145.0" layoutY="188.0" text="Y ::" />
+                  <Label fx:id="labY" layoutX="165.0" layoutY="188.0" text="0" />
+                  <Label layoutX="144.0" layoutY="168.0" text="M ::" />
+                  <Label fx:id="labM" layoutX="165.0" layoutY="168.0" text="0" />
+                  <Label layoutX="145.0" layoutY="148.0" text="D ::" />
+                  <Label fx:id="labD" layoutX="165.0" layoutY="148.0" text="0" />
+                  <Label layoutX="261.0" layoutY="132.0" text="Y" />
+                  <Label layoutX="228.0" layoutY="132.0" text="M" />
+                  <Label layoutX="198.0" layoutY="132.0" text="D" />
                </children>
             </AnchorPane>
         </content>

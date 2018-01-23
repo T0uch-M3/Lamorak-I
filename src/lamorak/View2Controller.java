@@ -5,7 +5,6 @@
  */
 package lamorak;
 
-import com.mysql.fabric.xmlrpc.base.Value;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.Date;
@@ -14,14 +13,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.temporal.Temporal;
-import java.time.temporal.TemporalAmount;
-import java.util.Calendar;
-import java.lang.Math;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,9 +41,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
-import java.time.*;
-import java.util.Formatter;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.input.ScrollEvent;
 /**
  *
@@ -79,12 +72,17 @@ public class View2Controller extends TabPane implements Initializable{
     private VBox matVBOX;
     @FXML
     private Tab t2,t1;
+    @FXML
+    private TableColumn<Reasons, Integer> colID; 
+    @FXML
+    private TableColumn<Reasons, String> colReason;
 
     
-
+    //*******************RANDOMWIERDVARIALBLES**********
+    ObservableList<String> data;
+    ObservableList<Reasons> reasonList;
     //***********************DATABASE************************
     int D,Y,M;
-    int i=0;
     PreparedStatement st = null; 
     Connection cn;
     //********************SPINNERS*****************************
@@ -123,6 +121,17 @@ public class View2Controller extends TabPane implements Initializable{
             Logger.getLogger(View2Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    private void registerHistory (String id, String reason, String name, Date date, Time time) throws SQLException{
+        String sqlH = "insert into HISTORY"+
+                "(ID, NAME, DATE, TIME, REASON)"+
+                "values (?,?,?,?,?)";
+        st = cn.prepareStatement(sqlH);
+        st.setString(1, id);
+        st.setString(2, name);
+        st.setDate(3, date);
+        st.setTime(4, time);
+        st.setString(5, reason);
+    }
     @FXML
     private void CheckAction(ActionEvent event){
         if (fieldPWD.isDisable())
@@ -136,7 +145,6 @@ public class View2Controller extends TabPane implements Initializable{
     @FXML
     private void debugAction(ScrollEvent me){
         
-        System.out.println(svf2.getValue());
 //        SpinnerValueFactory svf1 = sp1.getValueFactory();
 //        System.out.println(svf.getValue());
 //            System.out.println("Dbu(^O^)ugg");
@@ -151,9 +159,9 @@ public class View2Controller extends TabPane implements Initializable{
     //********************THIRD*TAB*************************************
     @FXML
     private void fetchAction(KeyEvent ke) throws SQLException{
-        if (ke.isControlDown()){
+        if (ke.getCode()== ke.getCode().ENTER){
                 System.out.println("GIMME THOSE DATA");
-        String sql = "select * from EMPLOYEE where ID = ? ";
+        String sql = "select * from EMPLOYEE where ID = ? or NAME = ? ";
 //        Connection cn = DriverManager.getConnection("jdbc:derby://localhost:1527/Project","Test","test");
         st = cn.prepareStatement(sql);
         st.setString(1, fieldIDc.getText());
@@ -163,7 +171,7 @@ public class View2Controller extends TabPane implements Initializable{
             fieldPWDc.setText(result.getString(4));
             labDATE.setText(result.getDate(5).toString());
             svf1.setValue(result.getInt(8));
-            monthSpin(result.getInt(10));
+            fromHourToDay(result.getInt(10));
             svf2.setValue(0);
             svf21.setValue(0);
             svf22.setValue(0);
@@ -176,7 +184,16 @@ public class View2Controller extends TabPane implements Initializable{
             
         }
     }
-    private void monthSpin(int i){
+    private int fromDayToHour(){
+        Integer d = new Integer(labD.getText());
+        Integer m = new Integer(labM.getText());
+        Integer y = new Integer(labY.getText());
+        int dd = d*24;
+        int mm = m*720;
+        int yy = y*8640;
+        return dd+mm+yy;
+    }
+    private void fromHourToDay(int i){
         int d=0,m=0,y=0,t1=6,t2=2,t;
             if (i > 24){
                 d = i/24;//counter when u get float result
@@ -191,13 +208,14 @@ public class View2Controller extends TabPane implements Initializable{
             }     
         System.out.println("d "+d+" m "+m+" y "+y);
         D=d;M=m;Y=y;
+
         labD.setText(String.valueOf(d));
         labM.setText(String.valueOf(m));
         labY.setText(String.valueOf(y));
     }
     @FXML
     private void updateAction(ActionEvent event) throws SQLException{
-        String sql2 = "update employee set NAME=?, PWD=?, MATER=?, PMATER=?, SPEC=?, MONVAC=? where ID = ?";
+        String sql2 = "update employee set NAME=?, PWD=?, MATER=?, PMATER=?, SPEC=?, MONVAC=?, LASTUPDATE=? where ID = ?";
         st = cn.prepareStatement(sql2);
         st.setString(1, fieldNAMEc.getText());
         st.setString(2, fieldPWDc.getText());
@@ -208,10 +226,16 @@ public class View2Controller extends TabPane implements Initializable{
         Integer x = new Integer(labPM.getText());
         st.setInt(4, x);
         st.setInt(5, (int) svf1.getValue());
-        st.setInt(6, (int) svf2.getValue());
-        st.setString(7, fieldIDc.getText());
+        st.setInt(6, fromDayToHour());
+        st.setDate(7, Date.valueOf(LocalDate.now()));
+        st.setString(8, fieldIDc.getText());
+        registerHistory(fieldIDc.getText(), "fuck it right?",
+                fieldNAMEc.getText(),Date.valueOf(LocalDate.now()),
+                Time.valueOf(LocalTime.now()));
+                
         int exupdt = st.executeUpdate();
     }
+
     @FXML
     private void pwdOpen(MouseEvent me){
         int count = me.getClickCount();
@@ -280,20 +304,22 @@ public class View2Controller extends TabPane implements Initializable{
         sp.setValueFactory(svf2);
         sp.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_VERTICAL);
         sp.setPrefWidth(32);
-        
         sp.setOnMouseClicked((MouseEvent event)->{
             Integer inB = new Integer(labD.getText());
+            Integer inBB = new Integer(labD.getText());
             Integer inSP = new Integer(String.valueOf(sp.getValue()));
+
             if (inB>0){
-                labD.setText(String.valueOf(inSP+inB+i));
-                inB++;
-                i++;
-                System.out.println("inB"+inB);
+                labD.setText(String.valueOf(D+inSP));
+//                System.out.println("inSP "+inSP);
+//                System.out.println("inB "+inB);
+//                System.out.println("DDDDD "+D);
             }
-            if(inB==0){
-             svf2.setValue(inB);
-//                sp.setValueFactory(svf1);
+            if(inB==0 && inSP<(-D)){
+             svf2.setValue(-D);
             }
+            if(inB==0 && inSP==(-D+1))
+                labD.setText(String.valueOf(D+inSP));
         });
         sp.setEditable(y);
         return sp;
@@ -307,6 +333,22 @@ public class View2Controller extends TabPane implements Initializable{
         sp.setValueFactory(svf21);
         sp.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_VERTICAL);
         sp.setPrefWidth(32);
+        
+        sp.setOnMouseClicked((MouseEvent event)->{
+            Integer inB = new Integer(labM.getText());
+            Integer inSP = new Integer(String.valueOf(sp.getValue()));
+            if (inB>0){
+                labM.setText(String.valueOf(M+inSP));
+//                System.out.println("inSP "+inSP);
+//                System.out.println("inB "+inB);
+//                System.out.println("DDDDD "+D);
+            }
+            if(inB==0 && inSP<(-M)){
+             svf21.setValue(-M);
+            }
+            if(inB==0 && inSP==(-M+1))
+                labM.setText(String.valueOf(M+inSP));
+        });
         sp.setEditable(y);
         return sp;
     }
@@ -319,6 +361,22 @@ public class View2Controller extends TabPane implements Initializable{
         sp.setValueFactory(svf22);
         sp.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_VERTICAL);
         sp.setPrefWidth(32);
+        
+        sp.setOnMouseClicked((MouseEvent event)->{
+            Integer inB = new Integer(labY.getText());
+            Integer inSP = new Integer(String.valueOf(sp.getValue()));
+            if (inB>0){
+                labY.setText(String.valueOf(Y+inSP));
+//                System.out.println("inSP "+inSP);
+//                System.out.println("inB "+inB);
+//                System.out.println("DDDDD "+D);
+            }
+            if(inB==0 && inSP<(-Y)){
+             svf22.setValue(-Y);
+            }
+            if(inB==0 && inSP==(-Y+1))
+                labY.setText(String.valueOf(Y+inSP));
+        });
         sp.setEditable(y);
         return sp;
     }
@@ -343,7 +401,7 @@ public class View2Controller extends TabPane implements Initializable{
     }
     //**********************************************************
     private int diffBetween (LocalDate ld, LocalDate ld2){
-    //NOTPERFECT****************ld-->old*******ld2-->new**
+    //NOTPERFECT*****ld2-ld*********ld-->old*******ld2-->new**
         int y = ld.getYear(), y2 = ld2.getYear();
         int Y = (y2-y)*365;
         
@@ -357,26 +415,68 @@ public class View2Controller extends TabPane implements Initializable{
         // return the difference in hours, 1 day = 2 hours
         return CC*2;
     }
-    private void updateVac(String id, int mv) throws SQLException{
-        String sqlUPDATE = "update EMPLOYEE set MONVAC = ? where ID = ?";
+    private void updateVac(int dif, int cur, String id) throws SQLException{
+        String sqlUPDATE = "update EMPLOYEE set MONVAC = ?, LASTUPDATE = ? where ID = ?";
         st = cn.prepareStatement(sqlUPDATE);
-        st.setInt(1, mv);
-        st.setString(2, id);
+        st.setInt(1, cur+dif);//(cur)rent amount + the (dif)ference between last update and currentDate
+        st.setDate(2, Date.valueOf(LocalDate.now()));
+        st.setString(3, id);
         int exUpd = st.executeUpdate();
     }
+    @FXML
     private void queryDate () throws SQLException{
         //fetch all rows and update MONVAC
-        String sqlDATE = "select INDATE, ID from EMPLOYEE";
+        int dif,cur;
+        String sqlDATE = "select LASTUPDATE, ID, MONVAC from EMPLOYEE";
         st = cn.prepareStatement(sqlDATE);
         ResultSet result = st.executeQuery();
+        
         while (result.next()){
-            LocalDate ld = result.getDate(1).toLocalDate();
-            int d = diffBetween(ld, LocalDate.now());
-            updateVac(result.getString(2),d);
+            LocalDate ldOld = result.getDate(1).toLocalDate();
+            if (ldOld != LocalDate.now()){
+                dif = diffBetween(ldOld, LocalDate.now());
+                cur = result.getInt(3);
+                updateVac(dif,cur,result.getString(2));
+            }
         }
+    }
+    @FXML
+    private boolean checkEmpty() throws SQLException{
+        String sqlE = "select * from THINGS";
+        st = cn.prepareStatement(sqlE);
+        ResultSet result = st.executeQuery();
+        if (result.next())
+            return false;
+        else
+            return true;
+    }
+    private void fillReasons (){
+        reasonList = FXCollections.observableArrayList();
+//        for (int i=0;i>9;i++){
+//            Reasons rn = new Reasons();
+//            rn.setID(i);
+//            rn.setST("ttttt");
+//            reasonList.add(rn);
+//        }
+//       data.add(reasonList);
+        Reasons rn = new Reasons();
+        rn.setID(0);
+        rn.setST("TEST ");
+        Reasons rs = new Reasons();
+        rs.setID(1);
+        rs.setST("TESTTTTTTTTTT");
+        reasonList.add(rs);
+        reasonList.add(rn);
+        reasonList.get(1).setST("LOL");
+        System.out.println(reasonList.get(1).getST());
+        colID.setCellValueFactory(cellData -> cellData.getValue().getIDProp().asObject());
+        colReason.setCellValueFactory(cellData -> cellData.getValue().getSTProp());
+        tt.setItems(reasonList);
+//        tt.getColumns().addAll(C1,C2,C3);
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+       
         //********************Meat for dogs******************
         try {
             
@@ -385,16 +485,16 @@ public class View2Controller extends TabPane implements Initializable{
             Logger.getLogger(View2Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
         //***********************************************
-         final ObservableList<String> data = FXCollections.observableArrayList("aaaa","bbbbbb","cccccc");
+        data = FXCollections.observableArrayList();
 
-         TableColumn C1 = new TableColumn();
-         C1.setText("C1");
-         TableColumn C2 = new TableColumn();
-         C2.setText("C2");
-         TableColumn C3 = new TableColumn();
-         C3.setText("C3");
-         tt.setItems(data);
-         tt.getColumns().addAll(C1,C2,C3);
+//         TableColumn C1 = new TableColumn();
+//         C1.setText("C1");
+//         TableColumn C2 = new TableColumn();
+//         C2.setText("C2");
+//         TableColumn C3 = new TableColumn();
+//         C3.setText("C3");
+//         tt.setItems(reasonList);
+//         tt.getColumns().addAll(C1,C2,C3);
          
         //****************************
         fm.getItems().addAll("F","M");
@@ -409,14 +509,15 @@ public class View2Controller extends TabPane implements Initializable{
         matVBOX.setSpacing(5);//=================VBOX for rBUTTons========
         matVBOX.getChildren().addAll(rb2,rb4,rb6);
         InitRadioButton(0);//==================Putting them in UI====================
-       
-        
+
         //================THEHOLYGROUND========================
-//        try {
-//            queryDate();
-//        } catch (SQLException ex) {
-//            Logger.getLogger(View2Controller.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        try {
+            if (checkEmpty())
+                fillReasons();
+            queryDate();
+        } catch (SQLException ex) {
+            Logger.getLogger(View2Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
         //====================================================
         tp6D.getChildren().add(SetupSpinner1(0, false, spinnerVF(0, 6)));
         tp1.getChildren().addAll(SetupSpinner2(0, true,-999,0),SetupSpinner21(0, true,-999,0),SetupSpinner22(0, true,-999,0));
