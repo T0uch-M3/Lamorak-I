@@ -16,7 +16,7 @@ import javafx.beans.property.StringProperty;
  * @author Touch-Me
  */
 public class Reasons {
-    StringProperty tab[]= new StringProperty[30];
+    String tab[]= new String[] {"test1","test2"};
     
     IntegerProperty id;
     StringProperty st ;
@@ -26,13 +26,8 @@ public class Reasons {
         this.id = new SimpleIntegerProperty();
         this.st = new SimpleStringProperty();
     }
-//    public void filling(){
-//        tab[1]= "TEST bitches";
-//        tab[2]= "TEST fuckers";
-//    }
-    private String ToString(){
-        return "id= "+id+"reason= "+st;
-    }
+    
+    
     public int getID(){
         return id.get();
     }
@@ -40,6 +35,7 @@ public class Reasons {
         return id;
     }
     public void setID(int id){
+            this.st.set(tab[id]);
         this.id.set(id);
     }
    
@@ -51,6 +47,8 @@ public class Reasons {
         return st.get();
     }
     public void setST(String st){
+//        if (st=="fuck")
         this.st.set(st);
+//        this.st.set("DID U SAY FUCK?");
     }
 }

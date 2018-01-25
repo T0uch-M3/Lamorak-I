@@ -7,23 +7,80 @@ package lamorak;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.Calendar;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 /**
  *
  * @author Touch-Me
  */
 public class History {
-    private String id, reason, name;
-    private Date date;
-    private Time time;
+    StringProperty name,reason;
+    IntegerProperty id;
+    SimpleObjectProperty<Date> date;
+    SimpleObjectProperty<Time>time;
     
-    public History(String id, String reason, String name, Date date, Time time){
-        this.id = id;
-        this.reason = reason;
-        this.name = name;
-        this.date = date;
-        this.time = time;
+    
+    public History(){
+        this.id = new SimpleIntegerProperty();
+        this.reason = new SimpleStringProperty();
+        this.name = new SimpleStringProperty();
+        this.date = new SimpleObjectProperty<>();
+        this.time = new SimpleObjectProperty<>();
     }
     
-    
+    public int getId(){
+        return id.get();
+    }
+     public IntegerProperty getIdProp(){
+        return id;
+    }
+    public void setId(int id){
+        this.id.set(id);
+    }
+    //*********************************
+    public StringProperty getNameProp(){
+        return name;
+    }
+    public String getName(){
+        return name.get();
+    }
+    public void setName(String name){
+        this.name.set(name);
+    }
+    //***********************************
+    public SimpleObjectProperty<Date> getDateProp(){
+        return date;
+    }
+    public void setDate(Date date){
+        this.date.set(date);
+    }
+    public Date getDate(){
+        return date.get();
+    }
+    //************************************
+    public SimpleObjectProperty<Time> getTimeProp(){
+        return time;
+    }
+    public void setTime(Time time){
+        this.time.set(time);
+    }
+    public Time getTime(){
+        return time.get();
+    }
+    //**********************************
+    public String getReason(){
+        return reason.get();
+    }
+    public void setReason(String reason){
+        this.reason.set(reason);
+    }
+    public StringProperty getReasonProp(){
+        return reason;
+    }
+    //**********************************
 }

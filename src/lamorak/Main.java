@@ -30,7 +30,7 @@ public class Main extends Application {
         stage.setTitle("Lamorak");
         stage.setMinWidth(700);
         stage.setMinHeight(500);
-        Parent root = FXMLLoader.load(getClass().getResource("View2N.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("View1.fxml"));
         Scene scene = new Scene(root);
         stage.setResizable(false);               
         stage.setScene(scene);
