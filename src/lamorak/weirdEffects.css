@@ -1,0 +1,139 @@
+*{
+    -fx-first :  #2D3447;
+
+    -fx-red : #FF0000;
+    /*-fx-text-fill:*/
+}
+
+.AnchorPane
+{
+-fx-background-color: -fx-first; 
+}
+.Label{
+    -fx-text-fill: #aeaeae;
+    -fx-font-family: "Footlight MT Light";
+    -fx-font-size : 25px;
+}
+.Label-small{
+    -fx-text-fill: #2196f3;
+    -fx-font-family: "Footlight MT Light";
+    -fx-font-size : 17px;
+}
+.LabelDate{
+    -fx-text-fill: white;
+    -fx-font-family: "Footlight MT Light";
+    -fx-font-size : 25px;
+    -fx-border-color : white;
+    -fx-border-radius: 10;
+    
+}
+.radio-button{
+/*    -jfx-selected-color: #15b163;*/
+    -jfx-selected-color: white;
+}
+.TextField{
+    -fx-prompt-text-fill : #878787;
+    -fx-text-inner-color:#c2c2c2;
+    -jfx-focus-color: #ff7818;
+    -jfx-unfocus-color: #ff7818;
+    -fx-font-family: "Footlight MT Light";
+    -fx-font-size : 20px;
+}
+
+.JFXComboBox{
+    -fx-prompt-text-fill : #878787;
+    -fx-text-fill: #c2c2c2;
+    -fx-text-inner-color:#c2c2c2;
+    -jfx-focus-color: #ff7818;
+    -jfx-unfocus-color: #ff7818;
+    -fx-font-family: "Footlight MT Light";
+    -fx-font-size : 17px;
+}
+.JFXComboBox :selected{
+
+    -fx-text-fill: #c2c2c2;
+
+}
+
+/*.column-header-background{
+    -fx-background-color: white;
+    -fx-border-style: segments(80);
+    -fx-border-left-bottom-style: solid; 
+    -fx-border-width: 0.5px;
+    -fx-border-color: white silver silver silver; 
+    -fx-border-color : -fx-first;
+        -fx-font-family: "Footlight MT Light";
+    -fx-font-size : 13px;
+}*/
+
+
+/**************************/
+.Button{
+    -fx-background-color : #2196f3;
+    -fx-font-family: "Footlight MT Light";
+    -fx-font-size : 21px;
+    -jfx-button-type: RAISED;
+    -fx-text-fill: white;
+}
+
+.tab{
+    -fx-background-color: -fx-first;
+    -fx-pref-width : 229;
+    -fx-pref-height : 50;
+}
+.tab-header-background{
+    -fx-background-color: -fx-first;
+}
+#normal-button:hover{
+    -fx-background-color :aqua;
+}
+
+.tab :hover{
+    -fx-background-color : #2D2447;
+}
+
+#A-Pane{
+    -fx-background-color : -fx-first;
+}
+.regionN{
+    -fx-background-color: -fx-first;
+    -fx-background-radius: 4.0;
+    -fx-effect: dropshadow(gaussian, rgb(0.0, 0.0, 0.0, 0.15), 8.0, 0.7, 0.0,1.5);
+    -fx-padding: 16 16 16 16;
+}
+.spinner{
+    -fx-body-color : #32C26D;
+    -fx-color : -fx-first;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill : white;
+    -fx-text-inner-size: 20px;
+    -fx-font-size: 15px;
+    -fx-text-inner-color:white;
+}
+.spinner .increment-arrow-button:pressed{
+/*    -fx-body-color : #00ffff;*/
+    -fx-body-color : -fx-first;
+}
+.spinner .decrement-arrow-button:pressed{
+    -fx-body-color : -fx-first;
+}
+.spinner > .text-field{
+    -fx-background-color : -fx-first;
+}
+.labelTest{
+    -fx-text-fill: white;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4px;
+    -fx-background-color:  #00ADD8;
+    -fx-font-weight:bold;
+    /*-fx-font-size:12px;*/
+
+    -fx-font-family: "Footlight MT Light";
+    -fx-font-size : 25px;
+}
+#UpdLabel{
+    -fx-background-color:red;
+    -fx-background-radius:10%;
+    -fx-text-fill: white;
+}
+/********************************/

@@ -5,6 +5,8 @@
  */
 package lamorak;
 
+import com.jfoenix.controls.JFXRadioButton;
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.Any;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.Date;
@@ -24,12 +26,15 @@ import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import static javafx.event.Event.ANY;
 import javafx.fxml.FXML;
 import javafx.scene.control.Spinner;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -45,6 +50,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Tooltip;
+import static javafx.scene.input.KeyCode.A;
 import javafx.util.Duration;
 /**
  *
@@ -56,7 +62,7 @@ public class View2Controller extends TabPane implements Initializable{
     @FXML
     private TableView tt;
     @FXML
-    private Button sub,upd;
+    private Button sub,upd, proceedB;
     @FXML
     private DatePicker fieldDATE;
     @FXML
@@ -65,8 +71,10 @@ public class View2Controller extends TabPane implements Initializable{
     private CheckBox checkVIP,matBox; 
     @FXML
     private TilePane tp6D,tp1;
+//    @FXML
+//    private ChoiceBox fm;
     @FXML
-    private ChoiceBox fm;
+    private ComboBox<String> fm;
     @FXML
     private VBox matVBOX;
     @FXML
@@ -79,25 +87,31 @@ public class View2Controller extends TabPane implements Initializable{
     private TableColumn<History, Time> C3;
     @FXML
     private TableColumn<History, String> C4;
+    @FXML
+    private JFXRadioButton rb2, rb4,rb6;
 
     
     //*******************RANDOMWIERDVARIALBLES**********
+    Event iv = new Event(ANY);
     ObservableList<String> data;
     ObservableList<History> historyList;
     boolean checked = false;//for matbox listening
     boolean startFetch = false; //detect whether fetching results started or no
+    ObservableList<String> boxList = FXCollections.observableArrayList("F","M");
     //***********************DATABASE************************
     int D,Y,M;
     PreparedStatement st = null; 
     Connection cn;
     //********************SPINNERS*****************************
+    //svf1 should be for the 6 day one, the rest go respectively D/M/Y (i think, just too lazy to go through the code)
     SpinnerValueFactory svf1, svf2, svf21, svf22;
     int svm, svM;
     //************Radio Buttons*******************************
+    
     ToggleGroup tg = new ToggleGroup();
-    RadioButton rb2 = new RadioButton("2 Months");
-    RadioButton rb4 = new RadioButton("4 Months");
-    RadioButton rb6 = new RadioButton("6 Months");
+//    JFXRadioButton rb2 = new JFXRadioButton("2 Months");
+//    JFXRadioButton rb4 = new JFXRadioButton("4 Months");
+//    JFXRadioButton rb6 = new JFXRadioButton("6 Months");
     //*********************SECOND*TAB**************************
     @FXML
     public void backAction (ActionEvent event) throws Exception {
@@ -141,18 +155,18 @@ public class View2Controller extends TabPane implements Initializable{
     public void submitAction (ActionEvent event){
         try {
             String sql = "insert into EMPLOYEE"
-            +"(ID, NAME, VIP, PWD, INDATE, GENDER, MONVAC, LASTUPDATE) values"
-            +"(?,?,?,?,?,?,?,?)";
+            +"(ID, NAME, INDATE, GENDER, MONVAC, LASTUPDATE) values"
+            +"(?,?,?,?,?,?)";
             st = cn.prepareStatement(sql);
             st.setString(1,fieldID.getText());
             st.setString(2,fieldNAME.getText());
-            st.setBoolean(3,checkVIP.isSelected());
-            st.setString(4,fieldPWD.getText());
-            st.setDate(5, Date.valueOf(fieldDATE.getValue()));
-            st.setString(6, fm.getValue().toString());
+            
+            
+            st.setDate(3, Date.valueOf(fieldDATE.getValue()));
+            st.setString(4, fm.getValue().toString());
             int d = diffBetween(fieldDATE.getValue(), LocalDate.now());
-            st.setInt(7, d);
-            st.setDate(8, Date.valueOf(LocalDate.now()));
+            st.setInt(5, d);
+            st.setDate(6, Date.valueOf(LocalDate.now()));
             st.executeUpdate();
             addDone.setText("Successfully added!");
         } catch (SQLException ex) {
@@ -199,47 +213,65 @@ public class View2Controller extends TabPane implements Initializable{
 
     //********************THIRD*TAB*************************************
     @FXML
-    private void fetchAction(KeyEvent ke) {
+    private void startFetch(){
+        
         try{
-        if (ke.getCode()== ke.getCode().ENTER){
             startFetch= true;
-                System.out.println("GIMME THOSE DATA");
-        String sql = "select * from EMPLOYEE where ID = ? or NAME = ? ";
-        st = cn.prepareStatement(sql);
-        st.setString(1, fieldIDc.getText());
-        st.setString(2, fieldNAMEc.getText());
-        ResultSet result = st.executeQuery();
-        result.next();
+            String sql = "select * from EMPLOYEE where ID = ? or NAME = ? ";
+            st = cn.prepareStatement(sql);
+            st.setString(1, fieldIDc.getText());
+            st.setString(2, fieldNAMEc.getText());
+            ResultSet result = st.executeQuery();
+            result.next();
             fieldIDc.setText(result.getString(1));
             fieldNAMEc.setText(result.getString(2));
-            fieldPWDc.setText(result.getString(4));
-            labDATE.setText(result.getDate(5).toString());
-            svf1.setValue(result.getInt(8));
-            fromHourToDay(result.getInt(10));
+
+            labDATE.setText(result.getDate(3).toString());
+            labMat.setText(String.valueOf(result.getInt(4)));
+            InitRadioButton(result.getInt(5));
+            svf1.setValue(result.getInt(6));
+            fromHourToDay(result.getInt(8));
             svf2.setValue(0);
             svf21.setValue(0);
             svf22.setValue(0);
             matBox.setSelected(false);
-            labMat.setText(String.valueOf(result.getInt(6)));
-            InitRadioButton(result.getInt(7));
             
-            
-        }
         }catch (SQLException ex){
             //display warning 
             if(fieldIDc.isFocused()){
-                warningID.setText("Erreur!");
+                
+                warningID.setText("doesn't exist!");
                 Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2500), 
                 ActionEvent -> warningID.setText("  ")));
                 timeline.play();
             }
             if(fieldNAMEc.isFocused()){
-                warningName.setText("erreur!");
+                warningName.setText("doesn't exist!");
                 Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2500),
                 ae -> warningName.setText("  ")));
                 timeline.play();
             }
             
+        }
+    }
+    @FXML
+    private void fetchActionK( KeyEvent ke ) {
+        if (ke.getCode()== ke.getCode().ENTER){
+            if(fieldNAMEc.isFocused())
+                fieldIDc.setText("");
+            else
+                fieldNAMEc.setText("");
+            startFetch();
+        }
+    }
+    @FXML
+    private void fetchActionM( MouseEvent me ) {
+        if (me.getButton()==me.getButton().PRIMARY){
+            if(fieldNAMEc.isFocused())
+                fieldIDc.setText("");
+            else
+                fieldNAMEc.setText("");
+            startFetch();
         }
     }
     private int fromDayToHour(){
@@ -264,7 +296,7 @@ public class View2Controller extends TabPane implements Initializable{
                     }
                 }
             }     
-        System.out.println("d "+d+" m "+m+" y "+y);
+//        System.out.println("d "+d+" m "+m+" y "+y);
         D=d;M=m;Y=y;
 
         labD.setText(String.valueOf(d));
@@ -274,40 +306,38 @@ public class View2Controller extends TabPane implements Initializable{
     @FXML
     private void updateAction(ActionEvent event){
     try{
-        String sql2 = "update employee set NAME=?, PWD=?, MATER=?, PMATER=?, SPEC=?, MONVAC=?, LASTUPDATE=? where ID = ?";
+        String sql2 = "update employee set NAME=?, MATER=?, PMATER=?, SPEC=?, MONVAC=?, LASTUPDATE=? where ID = ?";
         st = cn.prepareStatement(sql2);
-        Integer x = new Integer(labPM.getText());//2/4/6 vac
-                makeHistory(fieldIDc.getText(),fieldNAMEc.getText(),
-            checked, x, (int)svf1.getValue());
+        //****************2/4/6 vac for PMAT
+        Integer x = new Integer(labPM.getText());
+        //========just before the update happe, a log get created============================
+        makeHistory(fieldIDc.getText(),fieldNAMEc.getText(),checked, x, (int)svf1.getValue());
+        
         st.setString(1, fieldNAMEc.getText());
-        st.setString(2, fieldPWDc.getText());
         if (matBox.isSelected()){
-            st.setInt(3, Integer.valueOf(labMat.getText()+2));
             //add 2 months to the current flow 
+            st.setInt(2, Integer.valueOf(labMat.getText()+2));
             checked=true;
         }
         else{
-            st.setInt(3, Integer.valueOf(labMat.getText()));
+            st.setInt(2, Integer.valueOf(labMat.getText()));
             checked = false;
         }
-//        Integer x = new Integer(labPM.getText());//2/4/6 vac
-        st.setInt(4, x);
-        st.setInt(5, (int) svf1.getValue());//6 days vac
-        st.setInt(6, fromDayToHour());
-        st.setDate(7, Date.valueOf(LocalDate.now()));
-        st.setString(8, fieldIDc.getText());
+        st.setInt(3, x);
+        st.setInt(4, (int) svf1.getValue());//6 days vac
+        st.setInt(5, fromDayToHour());
+        st.setDate(6, Date.valueOf(LocalDate.now()));
+        st.setString(7, fieldIDc.getText());
         
-
-                
         int exupdt = st.executeUpdate();
-//        makeHistory(fieldIDc.getText(),fieldNAMEc.getText(),
-//            checked, x, (int)svf1.getValue());
-        updDone.setText("Updated");
+        
+        updDone.setText("Done");
         Timeline timeline = new Timeline(new KeyFrame(
         Duration.millis(2500), ActionEvent -> updDone.setText("  ")));
         timeline.play();
     }catch (NumberFormatException | SQLException exc){
         warningUpd.setText("Something went wrong!");
+        warningUpd.setId("UpdLabel");
         Timeline timeline = new Timeline(new KeyFrame(
         Duration.millis(2500),
         ae -> warningUpd.setText("")));
@@ -557,7 +587,6 @@ public class View2Controller extends TabPane implements Initializable{
         sth.setString(1, id);
         ResultSet result = sth.executeQuery();
         result.next();
-//        System.out.println("from db "+result.getString(1));
         if (result.getString(2).compareToIgnoreCase(name)!=0){
             System.out.println("name "+name+" name from db "+result.getString("NAME") );
             History hs = new History();
@@ -566,24 +595,54 @@ public class View2Controller extends TabPane implements Initializable{
             hs.setName(name);
             hs.setTime(Time.valueOf(LocalTime.now()));
             hs.setReason("name chaged");
-//            historyList.add(hs);
             fillHistory(hs);
         }
-        if ((result.getInt(6)!=Integer.valueOf(labMat.getText()))){
-            System.out.println("old mat "+result.getInt(6)+""+matV);
+        if ((result.getInt(4)!=Integer.valueOf(labMat.getText()))){
+//            System.out.println("old mat "+result.getInt(4)+""+matV);
             History hs = new History();
             hs.setDate(Date.valueOf(LocalDate.now()));
             hs.setId(idd);
             hs.setName(name);
             hs.setTime(Time.valueOf(LocalTime.now()));
             hs.setReason("Maternite selected");
-//            historyList.add(hs);
+            fillHistory(hs);
+        }
+        if ((result.getInt(5)!=Integer.valueOf(labPM.getText()))){
+//            System.out.println("old mat "+result.getInt(4)+""+matV);
+            History hs = new History();
+            hs.setDate(Date.valueOf(LocalDate.now()));
+            hs.setId(idd);
+            hs.setName(name);
+            hs.setTime(Time.valueOf(LocalTime.now()));
+            hs.setReason("Post Maternite changed to "+labPM.getText());
+            fillHistory(hs);
+        }
+        if ((result.getInt(6)!=Integer.valueOf(svf1.getValue().toString()))){
+//            System.out.println("old mat "+result.getInt(4)+""+matV);
+            History hs = new History();
+            hs.setDate(Date.valueOf(LocalDate.now()));
+            hs.setId(idd);
+            hs.setName(name);
+            hs.setTime(Time.valueOf(LocalTime.now()));
+            hs.setReason("6 day Vacation current status "+svf1.getValue().toString());
+            fillHistory(hs);
+        }
+        if ((result.getInt(8)!=fromDayToHour())){
+//            System.out.println("old mat "+result.getInt(4)+""+matV);
+            History hs = new History();
+            hs.setDate(Date.valueOf(LocalDate.now()));
+            hs.setId(idd);
+            hs.setName(name);
+            hs.setTime(Time.valueOf(LocalTime.now()));
+            hs.setReason("Changed From"+"Y: "+Y+" M: "+M+" D: "+D+" TO Y: "+labY.getText()+" M: "+labM.getText()+" D: "+labD.getText());
             fillHistory(hs);
         }
         }catch(SQLException ex){
             ex.printStackTrace();
         }       
     }
+    //************************************
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
        
@@ -597,26 +656,11 @@ public class View2Controller extends TabPane implements Initializable{
         //***********************************************
         data = FXCollections.observableArrayList();
 
-//         TableColumn C1 = new TableColumn();
-//         C1.setText("C1");
-//         TableColumn C2 = new TableColumn();
-//         C2.setText("C2");
-//         TableColumn C3 = new TableColumn();
-//         C3.setText("C3");
-//         tt.setItems(reasonList);
-//         tt.getColumns().addAll(C1,C2,C3);
-         
         //****************************
-        fm.getItems().addAll("F","M");
-        fm.getSelectionModel().select("F");
+        fm.setItems(boxList);
+//        fm.getSelectionModel().select("F");
         //***************************
         fieldDATE.setValue(LocalDate.now());//related to datepicker
-        fieldPWD.setDisable(true);//PWD disabled on default
-        //*****3rd tab text field*****
-//        upd.setDisable(true);
-        fieldPWDc.setEditable(false);
-        matVBOX.setSpacing(5);//=================VBOX for rBUTTons========
-        matVBOX.getChildren().addAll(rb2,rb4,rb6);
         InitRadioButton(0);//==================Putting them in UI====================
 
         //================THEHOLYGROUND========================
@@ -628,7 +672,6 @@ public class View2Controller extends TabPane implements Initializable{
         //====================================================
         tp6D.getChildren().add(SetupSpinner1(0, false, spinnerVF(0, 6)));
         tp1.getChildren().addAll(SetupSpinner2(0, true,-999,0),SetupSpinner21(0, true,-999,0),SetupSpinner22(0, true,-999,0));
-        //tpPM.getChildren().add(SetupSpinner(0, false, 0, 6));
         
     }
     

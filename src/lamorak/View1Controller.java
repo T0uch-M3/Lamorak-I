@@ -21,6 +21,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
+import javafx.util.Duration;
 /**
  *
  * @author Touch-Me
@@ -28,97 +35,100 @@ import java.util.logging.Logger;
 public class View1Controller extends AnchorPane implements Initializable{
     
     PreparedStatement st = null;
-    String sql2 = "SELECT * FROM EMPLOYEE";
-    String sql3 = "UPDATE EMPLOYEE SET VIP = true WHERE ID = '4'";
+    String sql1 = "SELECT * FROM USERS";
     ArrayList<String> store = new ArrayList<>();
     @FXML
     private TextField name;
+    @FXML
     private PasswordField password;
+    @FXML
+    private AnchorPane ppane;
+    @FXML
+    private Button confirm, newUserBut;
+    @FXML
+    private Label confirmWarning;
+    @FXML
+    private CheckBox rememberBox;
+
+    
     
     @FXML
     private void ConfirmAction (ActionEvent event) throws Exception{
         try {
-            
-        Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/Project","Test","test");
-            System.out.println("Connected");
-            st = con.prepareStatement(sql2);
+            Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/Project","Test","test");
+            st = con.prepareStatement(sql1);
             ResultSet result = st.executeQuery();
-                     //int count = st.executeUpdate();
-                     //System.out.println(count);
             while(result.next()) {
-             if ((result.getBoolean(3)==true)&&(result.getString(2).equals(name.getText()))) 
-                 //store.add(result.getString(2));
-                 this.move();
-             else
-                 System.out.println("wrong choice mate");
-//             System.out.println(result.getString    (1));//id
-//             System.out.println(result.getString    (2));//name
-//             System.out.println(result.getBoolean   (3));//VIP or no
-//             System.out.println(result.getString    (4));//password
+                if (((result.getString("NAME").equals(name.getText()))||(result.getString("ID").equals(name.getText()))) && result.getString("PWD").equals(password.getText())){
+                    
+                    if (rememberBox.isSelected())
+                        checkRemember(result.getString("ID"), con, true);
+                    if (!rememberBox.isSelected())
+                        checkRemember(result.getString("ID"), con, false);
+                    move();
+                }else
+                    confirmWarning.setText("Something went wrong!");
+                Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2500), ae -> confirmWarning.setText(" ")));
             }
-//            System.out.println(store);
-//             if ("test".equals(name.getText())){
-//             this.move();
-//             }
         } catch (SQLException ex){
-            System.out.println("It got fucked");
+            System.out.println("SQL fucked");
             Logger.getLogger(View1Controller.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             st.close();
-            System.out.println("Finally!!!");
         }
     }
-    
+    @FXML
+    private void checkRemember(String id, Connection cn, boolean boo) throws SQLException{
+        String sql4 = "UPDATE USERS set REMEMBER = ? where ID = ?";
+        PreparedStatement ps = cn.prepareStatement(sql4);
+        ps.setString(2, id);
+        ps.setBoolean(1, boo);
+        int nbr = ps.executeUpdate();
+        
+    }
     private void move() throws Exception{
         Main m = new Main();
         m.goto2();
     }
-
+    @FXML
+    private void gotoNewUser(ActionEvent ae) throws Exception{
+        Main m = new Main();
+        m.goto3();
+    }
+    @FXML
+    private void unfocusAll (MouseEvent me){
+        ppane.requestFocus();
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources)  {
+        try{
+        String sql2 = "SELECT * from USERS";
         
+        Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/Project","Test","test");
+        st = con.prepareStatement(sql2);
+        ResultSet result = st.executeQuery();
         
-        
-        try {
-            name.setText("Lakyus");
-//                     String sql1 = "INSERT INTO EMPLOYEE"
-//				+ "(ID, NAME, VIP, PWD) VALUES"
-//				+ "(?,?,?,?)";
-//        //String sql2 = "SELECT * FROM EMPLOYEE";
-//        //PreparedStatement st = null;
-//        try {
-//            Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/Project","Test","test");
-//            System.out.println("Connected");
-//            st = con.prepareStatement(sql2);
-//            ResultSet result = st.executeQuery();
-//            while(result.next()) {
-//
-//             System.out.println(result.getString    (1));
-//             System.out.println(result.getString    (2));
-//             System.out.println(result.getBoolean   (3));
-//             System.out.println(result.getString    (4));
-//            }
-//
-////            st.setString(1, "4");
-////            st.setString(2, "aaa");
-////            st.setBoolean(3, false);
-////            st.setString(4, null);
-////            st.executeUpdate();
-//        } catch (SQLException ex) {
-//            System.out.println("It got fucked");
-//            Logger.getLogger(View1Controller.class.getName()).log(Level.SEVERE, null, ex);
-//        } finally {
-//            try {
-//                st.close();
-//            } catch (SQLException ex) {
-//                Logger.getLogger(View1Controller.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
-        } catch (Exception ex) {
+        if (!result.next()) {    
+        newUserBut.setVisible(true);
+        newUserBut.setDisable(false);
+        } 
+        else{
+            newUserBut.setVisible(false);
+            newUserBut.setDisable(true);
+            if( result.getBoolean(4)==true){
+                rememberBox.setSelected(true);
+                name.setText(result.getString(2));
+                password.setText(result.getString(3));
+            }
+                else
+                rememberBox.setSelected(false);
             
-            Logger.getLogger(View1Controller.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            System.out.println("NOt CONNECTED");
+        }
+        
+        
+        
+        }catch (SQLException ex){
+            ex.printStackTrace();
         }
     }
     

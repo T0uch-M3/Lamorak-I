@@ -1,134 +1,225 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.text.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXRadioButton?>
+<?import com.jfoenix.controls.JFXTabPane?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.text.Font?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lamorak.View2Controller">
-  <tabs>
-    <Tab fx:id="t1" text="Adding">
-      <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+<JFXTabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" stylesheets="@weirdEffects.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lamorak.View2Controller">
+   <tabs>
+      <Tab fx:id="t1" text="Adding">
+         <content>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="500.0" prefWidth="700.0" styleClass="AnchorPane">
                <children>
-                  <TextField fx:id="fieldID" layoutX="154.0" layoutY="132.0" />
-                  <TextField fx:id="fieldNAME" layoutX="154.0" layoutY="173.0" />
-                  <PasswordField fx:id="fieldPWD" layoutX="536.0" layoutY="347.0" />
-                  <CheckBox fx:id="checkVIP" layoutX="536.0" layoutY="302.0" mnemonicParsing="false" onAction="#CheckAction" />
-                  <Button fx:id="sub" layoutX="264.0" layoutY="399.0" mnemonicParsing="false" onAction="#submitAction" prefHeight="25.0" prefWidth="72.0" text="ADD">
-                     <tooltip>
-                        <Tooltip text="Nothing can wrong here (^0^)" />
-                     </tooltip></Button>
-                  <Label layoutX="442.0" layoutY="302.0" text="Give access" />
-                  <Label layoutX="449.0" layoutY="351.0" text="Password" />
-                  <Label layoutX="78.0" layoutY="177.0" text="Name" />
-                  <Label layoutX="94.0" layoutY="138.0" text="ID" />
-                  <Label fx:id="label1" ellipsisString="" layoutX="154.0" layoutY="36.0" mouseTransparent="true" prefHeight="69.0" prefWidth="380.0" stylesheets="@Style.css" text="Adding new employee" textAlignment="CENTER">
+                  <Label fx:id="label1" ellipsisString="" layoutX="185.0" layoutY="9.0" mouseTransparent="true" prefHeight="69.0" prefWidth="380.0" styleClass="Label" text="Adding new employee" textAlignment="CENTER">
                      <font>
                         <Font size="22.0" />
                      </font>
                   </Label>
-                  <DatePicker fx:id="fieldDATE" layoutX="154.0" layoutY="215.0">
-                     <tooltip>
-                        <Tooltip text="This can be the date the employee started working or the date that he got into the app database" />
-                     </tooltip></DatePicker>
-                  <Label layoutX="45.0" layoutY="219.0" text="Signing data" />
-                  <ChoiceBox fx:id="fm" layoutX="302.0" layoutY="173.0" prefHeight="25.0" prefWidth="3.0">
-                     <tooltip>
-                        <Tooltip text="man or woman no transgenders" />
-                     </tooltip></ChoiceBox>
-                  <Label fx:id="addDone" layoutX="239.0" layoutY="433.0" prefHeight="19.0" prefWidth="122.0" text="  " textFill="#1cbf1c">
+                  <Label fx:id="addDone" layoutX="135.0" layoutY="408.0" prefHeight="19.0" prefWidth="122.0" text="  " textFill="#1cbf1c">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font>
                   </Label>
-               </children></AnchorPane>
-      </content>
-    </Tab>
-    <Tab fx:id="t2" text="History">
-      <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                  <Pane layoutX="41.0" layoutY="85.0" prefHeight="303.0" prefWidth="310.0" styleClass="regionN">
+                     <children>
+                        <JFXTextField fx:id="fieldID" labelFloat="true" layoutX="17.0" layoutY="39.0" prefHeight="38.0" prefWidth="201.0" promptText="Employee ID" styleClass="TextField">
+                           <font>
+                              <Font name="Footlight MT Light" size="20.0" />
+                           </font>
+                        </JFXTextField>
+                        <JFXTextField fx:id="fieldNAME" labelFloat="true" layoutX="20.0" layoutY="139.0" prefHeight="38.0" prefWidth="201.0" promptText="Employee Name" styleClass="TextField">
+                           <font>
+                              <Font name="Footlight MT Light" size="20.0" />
+                           </font>
+                        </JFXTextField>
+                        <JFXComboBox fx:id="fm" labelFloat="true" layoutX="224.0" layoutY="143.0" prefHeight="28.0" prefWidth="75.0" promptText="F/M" styleClass="JFXComboBox" />
+                        <JFXDatePicker fx:id="fieldDATE" defaultColor="#74cf77" layoutX="16.0" layoutY="218.0" prefHeight="38.0" prefWidth="201.0" promptText="In Date" styleClass="TextField">
+                           <tooltip>
+                              <Tooltip text="This can be the date the employee started working or the date that he got into the app database" />
+                           </tooltip>
+                           <effect>
+                              <ColorAdjust brightness="0.31" />
+                           </effect>
+                        </JFXDatePicker>
+                     </children>
+                  </Pane>
+                  <Pane layoutX="384.0" layoutY="232.0" prefHeight="156.0" prefWidth="283.0" styleClass="regionN">
+                     <children>
+                        <JFXCheckBox fx:id="checkVIP" checkedColor="#9125b5" layoutX="18.0" layoutY="19.0" onAction="#CheckAction" text="Give Acces" textFill="#d7d7d7" unCheckedColor="#bcbcbc">
+                           <font>
+                              <Font size="22.0" />
+                           </font>
+                           <effect>
+                              <Glow level="0.47" />
+                           </effect>
+                        </JFXCheckBox>
+                        <JFXPasswordField fx:id="fieldPWD" labelFloat="true" layoutX="13.0" layoutY="77.0" prefHeight="38.0" prefWidth="201.0" promptText="Password" styleClass="TextField" />
+                     </children>
+                  </Pane>
+                  <JFXButton fx:id="sub" layoutX="330.0" layoutY="399.0" onAction="#submitAction" styleClass="Button" text="Add" />
+               </children>
+            </AnchorPane>
+         </content>
+      </Tab>
+      <Tab text="Changing">
+         <content>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="700.0" styleClass="AnchorPane">
                <children>
-                  <Button fx:id="backb" layoutX="14.0" layoutY="421.0" mnemonicParsing="false" onAction="#backAction" text="Back" />
-                  <TableView fx:id="tt" layoutX="190.0" layoutY="73.0" prefHeight="200.0" prefWidth="504.0">
-                     <columns>
-                        <TableColumn fx:id="C1" prefWidth="86.0" resizable="false" text="Name" />
-                        <TableColumn fx:id="C2" prefWidth="87.0" resizable="false" text="Date" />
-                        <TableColumn fx:id="C3" prefWidth="52.0" resizable="false" text="Time" />
-                        <TableColumn fx:id="C4" prefWidth="283.0" resizable="false" text="Reason" />
-                     </columns></TableView>
-                  <TextField fx:id="fieldIDs" layoutX="14.0" layoutY="73.0" prefHeight="31.0" prefWidth="169.0" />
-                  <Label layoutX="14.0" layoutY="46.0" text="Employee ID" />
-                  <Button layoutX="103.0" layoutY="112.0" mnemonicParsing="false" onAction="#searchAction" prefHeight="25.0" prefWidth="80.0" text="Search" />
+                  <Label fx:id="warningUpd" layoutX="513.0" layoutY="419.0" prefHeight="22.0" prefWidth="179.0" textFill="WHITE">
+                     <font>
+                        <Font name="Footlight MT Light" size="17.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="updDone" layoutX="575.0" layoutY="356.0" prefHeight="19.0" prefWidth="58.0" textFill="#07c61e">
+                     <font>
+                        <Font name="Footlight MT Light" size="19.0" />
+                     </font>
+                  </Label>
+                  <JFXButton fx:id="upd" layoutX="557.0" layoutY="379.0" onAction="#updateAction" styleClass="Button" text="Update" />
+                  <Pane layoutX="358.0" layoutY="55.0" prefHeight="296.0" prefWidth="327.0" styleClass="regionN">
+                     <children>
+                        <Label layoutX="8.0" layoutY="232.0" styleClass="Label" text="Post Maternité" />
+                        <JFXCheckBox fx:id="matBox" checkedColor="#49bc26" layoutX="212.0" layoutY="161.0" text="2 Months" textFill="#2196f3">
+                           <font>
+                              <Font name="Footlight MT Light" size="18.0" />
+                           </font>
+                        </JFXCheckBox>
+                        <Label fx:id="labMat" layoutX="183.0" layoutY="162.0" styleClass="Label-small" text="0" underline="true" />
+                        <Label layoutX="12.0" layoutY="157.0" styleClass="Label" text="Maternité ::" />
+                        <Label layoutX="11.0" layoutY="114.0" styleClass="Label" text="6 Days Vacation" />
+                        <TilePane fx:id="tp6D" layoutX="211.0" layoutY="109.0" prefHeight="29.0" prefWidth="97.0">
+                           <padding>
+                              <Insets top="6.0" />
+                           </padding>
+                        </TilePane>
+                        <TilePane fx:id="tp1" layoutX="209.0" layoutY="34.0" onMouseClicked="#debugAction" prefHeight="64.0" prefWidth="101.0" />
+                        <Label layoutX="285.0" layoutY="14.0" styleClass="Label-small" text="Y" />
+                        <Label layoutX="249.0" layoutY="14.0" styleClass="Label-small" text="M" />
+                        <Label layoutX="219.0" layoutY="14.0" styleClass="Label-small" text="D" />
+                        <Label fx:id="labD" layoutX="187.0" layoutY="33.0" styleClass="Label-small" text="0" underline="true" />
+                        <Label fx:id="labM" layoutX="187.0" layoutY="51.0" styleClass="Label-small" text="0" underline="true" />
+                        <Label fx:id="labY" layoutX="187.0" layoutY="69.0" styleClass="Label-small" text="0" underline="true" />
+                        <Label layoutX="150.0" layoutY="70.0" styleClass="Label-small" text="Y ::" />
+                        <Label layoutX="149.0" layoutY="51.0" styleClass="Label-small" text="M ::" />
+                        <Label layoutX="150.0" layoutY="32.0" styleClass="Label-small" text="D ::" />
+                        <Label layoutX="11.0" layoutY="57.0" prefHeight="29.0" prefWidth="109.0" styleClass="Label" text="Vacation" />
+                        <Label layoutX="15.0" layoutY="24.0" prefHeight="29.0" prefWidth="109.0" styleClass="Label" text="Monthly " />
+                        <Separator layoutX="14.0" layoutY="104.0" prefHeight="15.0" prefWidth="300.0" />
+                        <Separator layoutX="11.0" layoutY="140.0" prefHeight="15.0" prefWidth="300.0" />
+                        <Separator layoutX="15.0" layoutY="187.0" prefHeight="15.0" prefWidth="300.0" />
+                        <Label fx:id="labPM" layoutX="181.0" layoutY="234.0" prefHeight="23.0" prefWidth="15.0" styleClass="Label-small" text="0" underline="true" />
+                        <Pane layoutX="201.0" layoutY="197.0" prefHeight="97.0" prefWidth="107.0">
+                           <children>
+                              <JFXRadioButton fx:id="rb2" layoutX="-3.0" layoutY="5.0" text="2 Months" textFill="#2196f3">
+                                 <font>
+                                    <Font name="Footlight MT Light" size="18.0" />
+                                 </font>
+                              </JFXRadioButton>
+                              <JFXRadioButton fx:id="rb4" layoutX="-3.0" layoutY="37.0" text="4 Months" textFill="#2196f3">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </JFXRadioButton>
+                              <JFXRadioButton fx:id="rb6" layoutX="-3.0" layoutY="74.0" text="6 Months" textFill="#2196f3">
+                                 <font>
+                                    <Font name="Footlight MT Light" size="18.0" />
+                                 </font>
+                              </JFXRadioButton>
+                           </children>
+                        </Pane>
+                     </children>
+                  </Pane>
+                  <Pane layoutX="10.0" layoutY="55.0" prefHeight="296.0" prefWidth="327.0" styleClass="regionN">
+                     <children>
+                        <JFXTextField fx:id="fieldIDc" labelFloat="true" layoutX="23.0" layoutY="17.0" onKeyPressed="#fetchActionK" promptText="Employee's ID" styleClass="TextField" />
+                        <JFXTextField fx:id="fieldNAMEc" labelFloat="true" layoutX="19.0" layoutY="87.0" onKeyPressed="#fetchActionK" promptText="Employee's Name" styleClass="TextField" />
+                        <Label layoutX="18.0" layoutY="152.0" prefHeight="28.0" prefWidth="191.0" styleClass="Label" text="Registration date" />
+                        <Label fx:id="labDATE" layoutX="163.0" layoutY="183.0" prefHeight="30.0" prefWidth="144.0" styleClass="LabelDate" />
+                        <Label fx:id="warningName" layoutX="268.0" layoutY="92.0" prefHeight="38.0" prefWidth="69.0" textFill="#ff4006" wrapText="true">
+                           <font>
+                              <Font name="Footlight MT Light" size="18.0" />
+                           </font></Label>
+                        <Label fx:id="warningID" layoutX="271.0" layoutY="21.0" lineSpacing="1.0" prefHeight="41.0" prefWidth="58.0" textFill="#ff4006" wrapText="true">
+                           <font>
+                              <Font name="Footlight MT Light" size="18.0" />
+                           </font>
+                        </Label>
+                        <Separator layoutX="12.0" layoutY="136.0" prefHeight="15.0" prefWidth="300.0" />
+                        <Separator layoutX="11.0" layoutY="213.0" prefHeight="15.0" prefWidth="300.0" />
+                        <JFXButton fx:id="proceedB" buttonType="RAISED" layoutX="242.0" layoutY="15.0" onMouseClicked="#fetchActionM" prefHeight="47.0" prefWidth="10.0" ripplerFill="#272f4300" text="   " textFill="#da494400">
+                           <graphic>
+                              <ImageView fitHeight="39.0" fitWidth="21.0">
+                                 <image>
+                                    <Image url="@right-arrow.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton buttonType="RAISED" layoutX="238.0" layoutY="85.0" onMouseClicked="#fetchActionM" prefHeight="47.0" prefWidth="10.0" text="  " textFill="#272f43">
+                           <graphic>
+                              <ImageView fitHeight="39.0" fitWidth="21.0">
+                                 <image>
+                                    <Image url="@right-arrow.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                  </Pane>
+               </children>
+            </AnchorPane>
+         </content>
+      </Tab>
+      <Tab fx:id="t2" text="History">
+         <content>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="500.0" prefWidth="700.0" styleClass="AnchorPane">
+               <children>
                   <Label fx:id="warningSearch" layoutX="120.0" layoutY="145.0" prefHeight="17.0" prefWidth="46.0" text="   " textFill="#da0a0a">
                      <font>
                         <Font size="13.0" />
                      </font>
                   </Label>
-               </children></AnchorPane>
-      </content>
-    </Tab>
-      <Tab text="Changing">
-        <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <children>
-                  <Button fx:id="upd" layoutX="539.0" layoutY="355.0" mnemonicParsing="false" onAction="#updateAction" prefHeight="32.0" prefWidth="67.0" text="Update">
-                     <tooltip>
-                        <Tooltip text="Empty Tooltip" />
-                     </tooltip></Button>
-                  <TextField fx:id="fieldIDc" layoutX="142.0" layoutY="76.0" onKeyPressed="#fetchAction" />
-                  <TextField fx:id="fieldNAMEc" layoutX="492.0" layoutY="76.0" onKeyPressed="#fetchAction" />
-                  <PasswordField fx:id="fieldPWDc" layoutX="492.0" layoutY="144.0" onMouseClicked="#pwdOpen" />
-                  <TilePane fx:id="tp1" layoutX="187.0" layoutY="153.0" onMouseClicked="#debugAction" prefHeight="64.0" prefWidth="101.0" />
-                  <Label layoutX="53.0" layoutY="80.0" text="Employee ID" />
-                  <Label layoutX="26.0" layoutY="148.0" text="Monthly Vacation" />
-                  <Label layoutX="426.0" layoutY="81.0" text="Name" />
-                  <Label layoutX="407.0" layoutY="148.0" text="password" />
-                  <Label layoutX="35.0" layoutY="232.0" text="6 Days Vacation" />
-                  <TilePane fx:id="tp6D" layoutX="163.0" layoutY="225.0" prefHeight="32.0" prefWidth="97.0">
-                     <padding>
-                        <Insets top="6.0" />
-                     </padding>
-                  </TilePane>
-                  <Label layoutX="57.0" layoutY="285.0" text="Maternité ::" />
-                  <Label layoutX="32.0" layoutY="338.0" text="Post Maternité :: " />
-                  <CheckBox fx:id="matBox" layoutX="170.0" layoutY="285.0" mnemonicParsing="false" text="2 Months" />
-                  <Label fx:id="labPM" layoutX="126.0" layoutY="338.0" text="0" />
-                  <VBox fx:id="matVBOX" layoutX="170.0" layoutY="338.0" prefHeight="115.0" prefWidth="93.0" />
-                  <Label layoutX="367.0" layoutY="197.0" text="Registration date" />
-                  <Label fx:id="labDATE" layoutX="489.0" layoutY="197.0" prefHeight="25.0" prefWidth="149.0" text="      " />
-                  <Label layoutX="145.0" layoutY="188.0" text="Y ::" />
-                  <Label fx:id="labY" layoutX="165.0" layoutY="188.0" text="0" />
-                  <Label layoutX="144.0" layoutY="168.0" text="M ::" />
-                  <Label fx:id="labM" layoutX="165.0" layoutY="168.0" text="0" />
-                  <Label layoutX="145.0" layoutY="148.0" text="D ::" />
-                  <Label fx:id="labD" layoutX="165.0" layoutY="148.0" text="0" />
-                  <Label layoutX="261.0" layoutY="132.0" text="Y" />
-                  <Label layoutX="228.0" layoutY="132.0" text="M" />
-                  <Label layoutX="198.0" layoutY="132.0" text="D" />
-                  <Button fx:id="debug" layoutX="309.0" layoutY="399.0" mnemonicParsing="false" onAction="#debugAction" text="DEBUG" />
-                  <Label fx:id="warningID" layoutX="309.0" layoutY="77.0" prefHeight="24.0" prefWidth="44.0" textFill="#f20606">
-                     <font>
-                        <Font name="System Bold" size="13.0" />
-                     </font></Label>
-                  <Label fx:id="warningName" layoutX="647.0" layoutY="77.0" prefHeight="24.0" prefWidth="44.0" text="     " textFill="#f20707" />
-                  <Label fx:id="warningUpd" layoutX="507.0" layoutY="396.0" prefHeight="22.0" prefWidth="138.0" textFill="#ff0a0a">
-                     <font>
-                        <Font size="13.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="updDone" layoutX="547.0" layoutY="329.0" prefHeight="19.0" prefWidth="58.0" text="     " textFill="#07c61e">
-                     <font>
-                        <Font name="System Bold" size="13.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="labMat" layoutX="126.0" layoutY="285.0" text="0" />
+                  <Pane layoutX="198.0" layoutY="3.0" prefHeight="306.0" prefWidth="482.0" styleClass="regionN">
+                     <children>
+                        <TableView fx:id="tt" editable="true" layoutX="4.0" layoutY="5.0" prefHeight="297.0" prefWidth="473.0">
+                           <columns>
+                              <TableColumn fx:id="C1" prefWidth="86.0" resizable="false" text="Name" />
+                              <TableColumn fx:id="C2" prefWidth="87.0" resizable="false" text="Date" />
+                              <TableColumn fx:id="C3" prefWidth="52.0" resizable="false" text="Time" />
+                              <TableColumn fx:id="C4" prefWidth="283.0" resizable="false" text="Reason" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </Pane>
+                  <Pane layoutX="4.0" layoutY="7.0" prefHeight="200.0" prefWidth="188.0" styleClass="regionN">
+                     <children>
+                        <JFXTextField fx:id="fieldIDs" labelFloat="true" layoutX="7.0" layoutY="31.0" prefHeight="37.0" prefWidth="177.0" promptText="Employee ID/Name" styleClass="TextField" />
+                        <JFXButton layoutX="79.0" layoutY="90.0" onAction="#searchAction" prefHeight="37.0" prefWidth="89.0" styleClass="Button" text="Search" />
+                     </children>
+                  </Pane>
                </children>
             </AnchorPane>
-        </content>
+         </content>
       </Tab>
-  </tabs>
-</TabPane>
+   </tabs>
+</JFXTabPane>

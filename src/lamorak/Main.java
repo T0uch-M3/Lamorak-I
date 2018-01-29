@@ -45,4 +45,8 @@ public class Main extends Application {
         Parent pane = FXMLLoader.load(getClass().getResource("View1.fxml"));
         stage.getScene().setRoot(pane);
     }
+    public void goto3() throws Exception{
+       Parent pane = FXMLLoader.load(getClass().getResource("View3.fxml"));
+       stage.getScene().setRoot(pane);
+    }
 }
