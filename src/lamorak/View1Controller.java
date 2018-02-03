@@ -5,6 +5,7 @@
  */
 package lamorak;
 
+import com.jfoenix.controls.JFXDrawer;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -26,6 +27,7 @@ import javafx.animation.Timeline;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 /**
@@ -34,6 +36,7 @@ import javafx.util.Duration;
  */
 public class View1Controller extends AnchorPane implements Initializable{
     
+    boolean init = false;
     PreparedStatement st = null;
     String sql1 = "SELECT * FROM USERS";
     ArrayList<String> store = new ArrayList<>();
@@ -44,14 +47,31 @@ public class View1Controller extends AnchorPane implements Initializable{
     @FXML
     private AnchorPane ppane;
     @FXML
-    private Button confirm, newUserBut;
+    private Button confirmBut, newUserBut;
     @FXML
     private Label confirmWarning;
     @FXML
     private CheckBox rememberBox;
-
-    
-    
+    @FXML
+    private JFXDrawer drawer;
+    public static String currentName, currentId;
+    @FXML
+    private void moveNext(KeyEvent ke){
+         if (ke.getCode()== ke.getCode().ENTER){
+        if (name.isFocused())
+            password.requestFocus();
+        else if (password.isFocused()){
+            confirmBut.requestFocus();
+            confirmBut.setDefaultButton(true);
+            }
+            
+         }
+    }
+    @FXML
+    private void moveSuser(ActionEvent ae) throws Exception{
+        Main m = new Main();
+        m.goto4();
+    }
     @FXML
     private void ConfirmAction (ActionEvent event) throws Exception{
         try {
@@ -60,18 +80,22 @@ public class View1Controller extends AnchorPane implements Initializable{
             ResultSet result = st.executeQuery();
             while(result.next()) {
                 if (((result.getString("NAME").equals(name.getText()))||(result.getString("ID").equals(name.getText()))) && result.getString("PWD").equals(password.getText())){
-                    
                     if (rememberBox.isSelected())
                         checkRemember(result.getString("ID"), con, true);
                     if (!rememberBox.isSelected())
                         checkRemember(result.getString("ID"), con, false);
                     move();
-                }else
+//                    System.out.println(result.getString("NAME"));
+                    currentId=result.getString("ID");
+                    currentName=result.getString("NAME");
+                }else{
                     confirmWarning.setText("Something went wrong!");
-                Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2500), ae -> confirmWarning.setText(" ")));
+                    Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2500), ae -> confirmWarning.setText(" ")));
+                    timeline.play();
+                }
             }
         } catch (SQLException ex){
-            System.out.println("SQL fucked");
+            ex.printStackTrace();
             Logger.getLogger(View1Controller.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             st.close();
@@ -102,34 +126,39 @@ public class View1Controller extends AnchorPane implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources)  {
         try{
-        String sql2 = "SELECT * from USERS";
+            String sql2 = "SELECT * from USERS where TYPE = 'N'";
         
-        Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/Project","Test","test");
-        st = con.prepareStatement(sql2);
-        ResultSet result = st.executeQuery();
+            Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/Project","Test","test");
+            st = con.prepareStatement(sql2);
+            ResultSet result = st.executeQuery();
         
-        if (!result.next()) {    
-        newUserBut.setVisible(true);
-        newUserBut.setDisable(false);
-        } 
-        else{
-            newUserBut.setVisible(false);
-            newUserBut.setDisable(true);
-            if( result.getBoolean(4)==true){
-                rememberBox.setSelected(true);
-                name.setText(result.getString(2));
-                password.setText(result.getString(3));
+            if (!result.next()) {    
+            newUserBut.setVisible(true);
+            newUserBut.setDisable(false);
+            } 
+            else{
+                newUserBut.setVisible(false);
+                newUserBut.setDisable(true);
+                if( result.getBoolean(4)==true){
+                    rememberBox.setSelected(true);
+                    name.setText(result.getString(2));
+                    password.setText(result.getString(3));
+                    Timeline timeline = new Timeline(new KeyFrame(Duration.millis(500), ae -> confirmBut.requestFocus()));
+                    timeline.play();
+                }
+                else{
+                    rememberBox.setSelected(false);
+                    Timeline timeline = new Timeline(new KeyFrame(Duration.millis(500), ae -> name.requestFocus()));
+                    timeline.play();
+                }
             }
-                else
-                rememberBox.setSelected(false);
-            
-        }
-        
-        
-        
-        }catch (SQLException ex){
-            ex.printStackTrace();
-        }
+            }catch (SQLException ex){
+                ex.printStackTrace();
+            }
+            if (rememberBox.isSelected())
+                confirmBut.setDefaultButton(true);
+            //****************************
+            Main.lastWindow="normalUser";
     }
     
 }

@@ -1,5 +1,6 @@
 *{
-    -fx-first :  #2D3447;
+    /*-fx-first :  #2D3447;*/
+    -fx-first : whitesmoke;
 
     -fx-red : #FF0000;
     /*-fx-text-fill:*/
@@ -10,42 +11,44 @@
 -fx-background-color: -fx-first; 
 }
 .Label{
-    -fx-text-fill: #aeaeae;
+    -fx-text-fill: #838383;
     -fx-font-family: "Footlight MT Light";
     -fx-font-size : 25px;
 }
 .Label-small{
-    -fx-text-fill: #2196f3;
+    -fx-text-fill: #FF9B00;
     -fx-font-family: "Footlight MT Light";
     -fx-font-size : 17px;
 }
 .LabelDate{
-    -fx-text-fill: white;
+    -fx-text-fill: #4c4f7d;
     -fx-font-family: "Footlight MT Light";
     -fx-font-size : 25px;
-    -fx-border-color : white;
+    -fx-border-color : #838383;
     -fx-border-radius: 10;
     
 }
 .radio-button{
-/*    -jfx-selected-color: #15b163;*/
-    -jfx-selected-color: white;
+    -jfx-selected-color: #15b163;
+    /*-jfx-selected-color: white;*/
 }
+/*#00b6ff*/
 .TextField{
-    -fx-prompt-text-fill : #878787;
-    -fx-text-inner-color:#c2c2c2;
-    -jfx-focus-color: #ff7818;
-    -jfx-unfocus-color: #ff7818;
+    -fx-prompt-text-fill : #838383;
+    -fx-text-inner-color:  #404040;
+    -jfx-focus-color: #7553b5;
+    -jfx-unfocus-color: #9571d8;
     -fx-font-family: "Footlight MT Light";
     -fx-font-size : 20px;
 }
+
 
 .JFXComboBox{
     -fx-prompt-text-fill : #878787;
     -fx-text-fill: #c2c2c2;
     -fx-text-inner-color:#c2c2c2;
-    -jfx-focus-color: #ff7818;
-    -jfx-unfocus-color: #ff7818;
+    -jfx-focus-color: #7553b5;
+    -jfx-unfocus-color: #9571d8;
     -fx-font-family: "Footlight MT Light";
     -fx-font-size : 17px;
 }
@@ -55,42 +58,68 @@
 
 }
 
-/*.column-header-background{
-    -fx-background-color: white;
-    -fx-border-style: segments(80);
-    -fx-border-left-bottom-style: solid; 
-    -fx-border-width: 0.5px;
-    -fx-border-color: white silver silver silver; 
-    -fx-border-color : -fx-first;
-        -fx-font-family: "Footlight MT Light";
-    -fx-font-size : 13px;
-}*/
-
 
 /**************************/
 .Button{
-    -fx-background-color : #2196f3;
+    -fx-background-color : #43a0ff;
     -fx-font-family: "Footlight MT Light";
     -fx-font-size : 21px;
     -jfx-button-type: RAISED;
-    -fx-text-fill: white;
+    -fx-text-fill: whitesmoke;
 }
-
+.Button2{
+    -fx-background-color : #43a0ff;
+    -fx-font-family: "Footlight MT Light";
+    -fx-font-size : 21px;
+    /*-jfx-button-type: ;*/
+    -fx-text-fill: whitesmoke;
+}
+.RemoveButton{
+    -fx-background-color : #da3344;
+    -fx-font-family: "Footlight MT Light";
+    -fx-font-size : 21px;
+    /*-jfx-button-type: ;*/
+    -fx-text-fill: whitesmoke;
+}
 .tab{
+    
     -fx-background-color: -fx-first;
     -fx-pref-width : 229;
     -fx-pref-height : 50;
+    -fx-border-style : segments(120) ;
+    -fx-border-width : 0.5;
+    -fx-border-color:#068fff;
+    
+}
+.tab .tab-label {
+    -fx-text-fill: #d286fd;
+    -fx-font-family: "Footlight MT Light";
+    -fx-font-size : 25px;
+} 
+.tab:selected .tab-label {
+    -fx-text-fill: #5300b5;
+    -fx-focus-color :red;
+} 
+.tab2{
+    -fx-background-color: -fx-first;
+    -fx-pref-width : 344;
+    -fx-pref-height : 50;
 }
 .tab-header-background{
-    -fx-background-color: -fx-first;
+    -fx-background-color: whitesmoke;
+    -fx-border-color:#068fff ;
+    -fx-border-style : segments(20) ;
+    -fx-border-width : 0.5;
 }
+
 #normal-button:hover{
     -fx-background-color :aqua;
 }
 
 .tab :hover{
-    -fx-background-color : #2D2447;
+    -fx-background-color : #ffaaa2;
 }
+
 
 #A-Pane{
     -fx-background-color : -fx-first;
@@ -98,20 +127,20 @@
 .regionN{
     -fx-background-color: -fx-first;
     -fx-background-radius: 4.0;
-    -fx-effect: dropshadow(gaussian, rgb(0.0, 0.0, 0.0, 0.15), 8.0, 0.7, 0.0,1.5);
+    -fx-effect: dropshadow(gaussian, rgb(0.0, 0.0, 0.0, 0.15), 5.0, 0.7, 0.0,1.5);
+     /*-fx-effect: dropshadow(gaussian , red, 10, 0.7 , 0.0, 1.5);*/
     -fx-padding: 16 16 16 16;
 }
 .spinner{
-    -fx-body-color : #32C26D;
+    -fx-body-color : #00ADD8;
     -fx-color : -fx-first;
     -fx-text-fill: white;
-    -fx-prompt-text-fill : white;
+    -fx-prompt-text-fill : black;
     -fx-text-inner-size: 20px;
     -fx-font-size: 15px;
-    -fx-text-inner-color:white;
+    -fx-text-inner-color:red;
 }
 .spinner .increment-arrow-button:pressed{
-/*    -fx-body-color : #00ffff;*/
     -fx-body-color : -fx-first;
 }
 .spinner .decrement-arrow-button:pressed{
@@ -137,3 +166,61 @@
     -fx-text-fill: white;
 }
 /********************************/
+
+.table-view .column-header, .table-view .filler {
+    -fx-background-color: white;
+}
+.table-view .column-header:last-visible{
+    -fx-border-width: 0 0 1 0;
+}
+.table-view .column-header-background{
+    -fx-background-color: transparent;
+}
+.table-view .column-header{
+    -fx-border-width: 0 1 1 0;
+    -fx-border-color: rgba(1,1,1,0.15);
+}
+.table-view .column-header .label{
+    -fx-font-size:16px;
+    -fx-text-fill: #d386ff;
+    -fx-padding:12 0 12 0;
+    -fx-alignment:CENTER;
+    -fx-font-family: "Footlight MT Light";
+}
+.table-view .table-row-cell .table-cell{
+    -fx-border-width: 0 0 0 0;
+}
+
+.table-view .table-row-cell:selected .table-cell{
+    -fx-text-fill: red;
+    -fx-border-width: 0 0 0 0;
+}
+.table-view .table-row-cell:selected{
+    -fx-background-color: rgba(0,0,0,0.04);
+    -fx-background-insets:0;
+}
+
+
+.table-view .table-row-cell{
+    -fx-background-color:transparent;
+    -fx-background-insets:0;
+}
+
+.table-view .table-column{
+    -fx-alignment:CENTER;
+    -fx-padding:0 16 0 16;
+}
+
+.table-view .table-cell{
+    -fx-font-size: 17px;
+    -fx-font-family: "Footlight MT Light";
+}
+
+
+.table-view .corner{
+    -fx-background-color:transparent;
+
+}
+.tree-table-row-cell{
+    -fx-background-color : red;
+}

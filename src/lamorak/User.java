@@ -5,7 +5,6 @@
  */
 package lamorak;
 
-import java.sql.Array;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -15,40 +14,33 @@ import javafx.beans.property.StringProperty;
  *
  * @author Touch-Me
  */
-public class Reasons {
-    String tab[]= new String[] {"test1","test2"};
-    
+public class User {
+    StringProperty name;
     IntegerProperty id;
-    StringProperty st ;
-
-    public Reasons() {
-        //filling();
+    
+    
+    public User(){
         this.id = new SimpleIntegerProperty();
-        this.st = new SimpleStringProperty();
+        this.name = new SimpleStringProperty();
     }
     
-    
-    public int getID(){
+    public int getId(){
         return id.get();
     }
-     public IntegerProperty getIDProp(){
+     public IntegerProperty getIdProp(){
         return id;
     }
-    public void setID(int id){
-            this.st.set(tab[id]);
+    public void setId(int id){
         this.id.set(id);
     }
-   
-
-    public StringProperty getSTProp(){
-        return st;
+    //*********************************
+    public StringProperty getNameProp(){
+        return name;
     }
-    public String getST(){
-        return st.get();
+    public String getName(){
+        return name.get();
     }
-    public void setST(String st){
-//        if (st=="fuck")
-        this.st.set(st);
-//        this.st.set("DID U SAY FUCK?");
+    public void setName(String name){
+        this.name.set(name);
     }
 }

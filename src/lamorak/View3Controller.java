@@ -11,10 +11,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -36,7 +35,7 @@ public class View3Controller extends AnchorPane implements Initializable{
     @FXML
     private PasswordField pwdFieldA;
     @FXML
-    private Label nameWarning, idWarning, pwdWarning, addingDone;
+    private Label nameWarning, idWarning, pwdWarning, addingDone, statUserType;
     @FXML
     private Pane ppane, ppane1, ppane2;
     //*****************************
@@ -44,12 +43,19 @@ public class View3Controller extends AnchorPane implements Initializable{
     PreparedStatement st = null;
     Main m = new Main();
     
-    
+    @FXML
+    private void goBack(ActionEvent ae) throws Exception{
+        Main m = new Main();
+        if (Main.lastWindow=="normalUser")
+            m.goto1();
+        if(Main.lastWindow=="superUser")
+            m.goto4();
+    }
     @FXML
     private void addingUserAction(MouseEvent me){
         try{
         Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/Project","Test","test");
-        String sql = "INSERT into USERS (ID, NAME, PWD) values (?,?,?)";
+        String sql = "INSERT into USERS (ID, NAME, PWD, TYPE) values (?,?,?,?)";
         if (nameFieldA.getText().trim().isEmpty()){
             nameWarning.setText("Required field");
             Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2500), ae -> nameWarning.setText(" ")));
@@ -70,6 +76,11 @@ public class View3Controller extends AnchorPane implements Initializable{
             st.setString(1, idFieldA.getText());
             st.setString(2, nameFieldA.getText());
             st.setString(3, pwdFieldA.getText());
+            //check if normal user or no
+            if (Main.lastWindow=="normalUser")
+                st.setString(4, "N");
+            if(Main.lastWindow=="superUser")
+                st.setString(4, "S");
             st.executeUpdate();
             addingDone.setText(" ");
             Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2500), actionevent -> {
@@ -85,7 +96,6 @@ public class View3Controller extends AnchorPane implements Initializable{
         }catch(SQLException exc){
             exc.printStackTrace();
         }
-        
     }
         @FXML
     private void unfocusAll (MouseEvent me){
@@ -95,8 +105,10 @@ public class View3Controller extends AnchorPane implements Initializable{
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-         
-        
+        if (Main.lastWindow=="normalUser")
+            statUserType.setText("    Add New User");
+        if(Main.lastWindow=="superUser")
+            statUserType.setText("    Add a Manager");
     }
     
     

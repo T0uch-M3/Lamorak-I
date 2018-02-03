@@ -5,8 +5,9 @@
  */
 package lamorak;
 
+import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXRadioButton;
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.Any;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.Date;
@@ -28,16 +29,18 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import static javafx.event.Event.ANY;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Spinner;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -50,7 +53,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Tooltip;
-import static javafx.scene.input.KeyCode.A;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 /**
  *
@@ -62,23 +68,21 @@ public class View2Controller extends TabPane implements Initializable{
     @FXML
     private TableView tt;
     @FXML
-    private Button sub,upd, proceedB;
+    private Button sub,upd, proceedB, testButton, noteField,arrowD;
     @FXML
     private DatePicker fieldDATE;
     @FXML
-    private TextField fieldID,fieldNAME,fieldPWD,fieldIDc,fieldNAMEc,fieldPWDc,fieldIDs;
+    private TextField fieldID,fieldNAME,fieldPWD,fieldIDc,fieldNAMEc,fieldPWDc,fieldIDs,fieldNames;
     @FXML
     private CheckBox checkVIP,matBox; 
     @FXML
     private TilePane tp6D,tp1;
-//    @FXML
-//    private ChoiceBox fm;
     @FXML
     private ComboBox<String> fm;
     @FXML
     private VBox matVBOX;
     @FXML
-    private Tab t2,t1;
+    private Tab tabA,tabC,tabH;
     @FXML
     private TableColumn<History, String> C1;
     @FXML
@@ -89,9 +93,21 @@ public class View2Controller extends TabPane implements Initializable{
     private TableColumn<History, String> C4;
     @FXML
     private JFXRadioButton rb2, rb4,rb6;
+    @FXML
+    public JFXDrawer drawPane,drawPane1,drawPane2;
+    @FXML
+    private AnchorPane anchorA, anchorC, anchorH;
+    @FXML
+    private ImageView outArrow;
+    @FXML
+    private Group firstGroup;
 
-    
     //*******************RANDOMWIERDVARIALBLES**********
+    
+    Timeline timeL;
+    boolean left = false, entered = false;
+    Boolean vis = true;
+    boolean checkL = false;
     Event iv = new Event(ANY);
     ObservableList<String> data;
     ObservableList<History> historyList;
@@ -112,7 +128,7 @@ public class View2Controller extends TabPane implements Initializable{
 //    JFXRadioButton rb2 = new JFXRadioButton("2 Months");
 //    JFXRadioButton rb4 = new JFXRadioButton("4 Months");
 //    JFXRadioButton rb6 = new JFXRadioButton("6 Months");
-    //*********************SECOND*TAB**************************
+    //*********************THIRD*TAB**************************
     @FXML
     public void backAction (ActionEvent event) throws Exception {
         Main m = new Main();
@@ -121,30 +137,31 @@ public class View2Controller extends TabPane implements Initializable{
     @FXML
     public void searchAction(ActionEvent event){
         try{
-        historyList = FXCollections.observableArrayList();
-        String sqlS = "select * from HISTORY where ID = ?";
-        st = cn.prepareStatement(sqlS);
-        Integer id = new Integer(fieldIDs.getText());
-        st.setInt(1, id);
-        ResultSet result = st.executeQuery();
-        while(result.next()){
-            History hs = new History();
-            hs.setDate(result.getDate(1));
-            hs.setId(result.getInt(5));
-            hs.setName(result.getString(3));
-            hs.setTime(result.getTime(2));
-            hs.setReason(result.getString(4));
-            historyList.add(hs);
-        }
+            historyList = FXCollections.observableArrayList();
+            String sqlS = "select * from HISTORY where TYPE = 'E'";
+            PreparedStatement Pstat = cn.prepareStatement(sqlS);
+            ResultSet result = Pstat.executeQuery();
+            while(result.next()){
+                if ((result.getString("ID").equals(fieldIDs.getText()))||(result.getString("NAME").equals(fieldIDs.getText()))){
+                History hs = new History();
+                hs.setDate(result.getDate(1));
+                hs.setId(result.getInt(5));
+                hs.setName(result.getString(3));
+                hs.setTime(result.getTime(2));
+                hs.setReason(result.getString(4));
+                historyList.add(hs);
+                }
+            }
+            
+            C1.setCellValueFactory(cellData -> cellData.getValue().getNameProp());
+            C2.setCellValueFactory(cellData -> cellData.getValue().getDateProp());
+            C3.setCellValueFactory(cellData -> cellData.getValue().getTimeProp());
+            C4.setCellValueFactory(cellData -> cellData.getValue().getReasonProp());
+            tt.setItems(historyList);
         
-        C1.setCellValueFactory(cellData -> cellData.getValue().getNameProp());
-        C2.setCellValueFactory(cellData -> cellData.getValue().getDateProp());
-        C3.setCellValueFactory(cellData -> cellData.getValue().getTimeProp());
-        C4.setCellValueFactory(cellData -> cellData.getValue().getReasonProp());
-        tt.setItems(historyList);
-        
-        }catch(NumberFormatException | SQLException ex){
-            warningSearch.setText("Erreur!");
+        }catch(SQLException ex){
+            warningSearch.setText("Somethig went wrong!");
+            ex.printStackTrace();
             Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2500),
                     ActionEvent -> warningSearch.setText("  ")));
             timeline.play();
@@ -197,21 +214,21 @@ public class View2Controller extends TabPane implements Initializable{
     }
     //*************************************************************
     @FXML
-    private void debugAction(ActionEvent me) throws SQLException{
-        makeHistory("1111","EST",
-                true, 2, 6);
+    private void debugAction(KeyEvent ke) throws SQLException{
+            if(ke.getCode()==ke.getCode().ENTER)
+                System.out.println(fieldIDs.getText());
 //        SpinnerValueFactory svf1 = sp1.getValueFactory();
 //        System.out.println(svf.getValue());
 //            System.out.println("Dbu(^O^)ugg");
 //            System.out.println(svf.getValue());
-            me.consume();
+//            me.consume();
            //ObservableList<String> tab = new ObservableList<String>();
 //           ObservableList<String> str = "aaa";
 //           tt.setItems(value);
 //           C1.setCellValueFactory(new PropertyValueFactory<Object,String>("TEST"));
     }
 
-    //********************THIRD*TAB*************************************
+    //********************SECOND*TAB*************************************
     @FXML
     private void startFetch(){
         
@@ -409,7 +426,7 @@ public class View2Controller extends TabPane implements Initializable{
         sp.setValueFactory(svf2);
         sp.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_VERTICAL);
         sp.setPrefWidth(32);
-        sp.setOnMouseClicked((MouseEvent event)->{
+        sp.setOnMouseReleased((MouseEvent event)->{
             Integer inB = new Integer(labD.getText());
             Integer inBB = new Integer(labD.getText());
             Integer inSP = new Integer(String.valueOf(sp.getValue()));
@@ -439,7 +456,7 @@ public class View2Controller extends TabPane implements Initializable{
         sp.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_VERTICAL);
         sp.setPrefWidth(32);
         
-        sp.setOnMouseClicked((MouseEvent event)->{
+        sp.setOnMouseReleased((MouseEvent event)->{
             Integer inB = new Integer(labM.getText());
             Integer inSP = new Integer(String.valueOf(sp.getValue()));
             if (inB>0){
@@ -467,7 +484,7 @@ public class View2Controller extends TabPane implements Initializable{
         sp.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_VERTICAL);
         sp.setPrefWidth(32);
         
-        sp.setOnMouseClicked((MouseEvent event)->{
+        sp.setOnMouseReleased((MouseEvent event)->{
             Integer inB = new Integer(labY.getText());
             Integer inSP = new Integer(String.valueOf(sp.getValue()));
             if (inB>0){
@@ -567,14 +584,15 @@ public class View2Controller extends TabPane implements Initializable{
             return true;
     }
     private void fillHistory(History h) throws SQLException{
-        String sqlH = "insert into History (ID, DATE, TIME, NAME, REASON)"
-                +"values (?,?,?,?,?)";
+        String sqlH = "insert into History (ID, DATE, TIME, NAME, REASON, TYPE)"
+                +"values (?,?,?,?,?,?)";
         PreparedStatement stf = cn.prepareStatement(sqlH);
         stf.setInt(1, h.getId());
         stf.setDate(2, h.getDate());
         stf.setTime(3, h.getTime());
         stf.setString(4, h.getName());
         stf.setString(5, h.getReason());
+        stf.setString(6, "E");
         stf.executeUpdate();
     }
     private void makeHistory (String id, String name, boolean matV, int tfs, int svfInc ){
@@ -642,14 +660,102 @@ public class View2Controller extends TabPane implements Initializable{
         }       
     }
     //************************************
-
+    @FXML
+    private void transitionMeth(Event ev){
+        if(tabA.isSelected()){
+                if(anchorA.getChildren().contains(noteField)==false)
+                anchorA.getChildren().add(noteField);
+                if(anchorA.getChildren().contains(firstGroup)==false)
+                anchorA.getChildren().add(firstGroup);
+                firstGroup.toBack();
+        }
+        else if (tabC.isSelected()){
+                if(anchorC.getChildren().contains(noteField)==false)
+                anchorC.getChildren().add(noteField);
+                if(anchorC.getChildren().contains(firstGroup)==false)
+                anchorC.getChildren().add(firstGroup);
+                firstGroup.toBack();
+        }
+        else if (tabH.isSelected()){
+                if(anchorH.getChildren().contains(noteField)==false)
+                anchorH.getChildren().add(noteField);
+                if(anchorH.getChildren().contains(firstGroup)==false)
+                anchorH.getChildren().add(firstGroup);
+                firstGroup.toBack();
+        }
+    }
+    //the following 3 methods are for the hovering mechanic, this's crazy ikn
+    @FXML
+    private void checkIn(MouseEvent me){
+        if (vis==true){
+        entered = true;
+        left = false;
+        System.out.println("in");
+        }
+    }
+    @FXML
+    private void checkOut(MouseEvent me){
+        if (vis == false){
+        entered = false;
+        timeL = new Timeline(new KeyFrame(Duration.millis(500), ae -> {
+            if (entered==false){
+                noteField.toFront();
+                noteField.setVisible(true);
+                vis=true;
+                System.out.println("out");
+                left = true;
+                firstGroup.setDisable(true);
+            }
+        }));
+        timeL.play();
+        }
+    }
+    @FXML
+    private void options (MouseEvent me){
+        firstGroup.setDisable(false);
+        noteField.toBack();
+        noteField.setVisible(false);
+        vis=false;
+    }
+    //***********************************************************************
+    @FXML
+    public static void addingLog(String state) throws SQLException{
+        String sqlL = "insert into History (ID, DATE, NAME, REASON, TYPE, TIME)"
+                +"values (?,?,?,?,?,?)";
+        Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/Project","Test","test");
+        PreparedStatement prs = connection.prepareStatement(sqlL);
+        prs.setInt(1, Integer.valueOf(View1Controller.currentId));
+        prs.setDate(2, Date.valueOf(LocalDate.now()));
+        prs.setString(3, View1Controller.currentName);
+        prs.setString(4, state);
+        prs.setString(5, "U");
+        prs.setTime(6, Time.valueOf(LocalTime.now()));
+        prs.executeUpdate();
+    }
+    @FXML
+    private void mainMenu(ActionEvent ae) throws Exception{
+        Main m = new Main();
+        addingLog("Left");
+        m.goto1();
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-       
+        //it appear the initialize is really slow that i had to delay
+        //code execution so this methode can catch up on it :(
+        Timeline tmLine = new Timeline(new KeyFrame(Duration.millis(500), ae -> {
+            noteField.setText(View1Controller.currentName);
+            try {
+                addingLog("Entered");
+            } catch (SQLException ex) {
+                Logger.getLogger(View2Controller.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                }));
+        tmLine.play();
+        
         //********************Meat for dogs******************
         try {
-            
             cn = DriverManager.getConnection("jdbc:derby://localhost:1527/Project","Test","test");
+//            addingLog();
         } catch (SQLException ex) {
             Logger.getLogger(View2Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
