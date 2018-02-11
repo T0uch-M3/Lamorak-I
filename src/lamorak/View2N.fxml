@@ -37,7 +37,7 @@
                   </Label>
                   <Group fx:id="firstGroup" disable="true" layoutX="70.0" layoutY="402.0" onMouseEntered="#checkIn" onMouseExited="#checkOut">
                      <children>
-                        <JFXButton fx:id="buttontest1" buttonType="RAISED" contentDisplay="CENTER" graphicTextGap="20.0" layoutX="-23.0" layoutY="3.0" prefHeight="45.0" prefWidth="47.0" ripplerFill="#4cc1db" style="-fx-background-color: transparent;" text=" " textFill="#c6c6c6" wrapText="true">
+                        <JFXButton fx:id="buttontest1" buttonType="RAISED" contentDisplay="CENTER" graphicTextGap="20.0" layoutX="-23.0" layoutY="3.0" onAction="#gotoPassword" prefHeight="45.0" prefWidth="47.0" ripplerFill="#4cc1db" style="-fx-background-color: transparent;" text=" " textFill="#c6c6c6" wrapText="true">
                            <font>
                               <Font name="Footlight MT Light" size="15.0" />
                            </font>
@@ -252,8 +252,8 @@
                   </Pane>
                   <Pane layoutX="30.0" layoutY="22.0" prefHeight="69.0" prefWidth="401.0" styleClass="regionN">
                      <children>
-                        <JFXTextField fx:id="fieldIDs" alignment="CENTER" layoutX="7.0" layoutY="16.0" onKeyPressed="#debugAction" prefHeight="37.0" prefWidth="177.0" promptText=" Employee's ID" style="-fx-border-color: blue; -fx-border-radius: 13px; -jfx-focus-color: white; -jfx-unfocus-color: white; -fx-border-width: 0.3;" styleClass="TextField" />
-                        <JFXButton layoutX="202.0" layoutY="14.0" onAction="#searchAction" prefHeight="37.0" prefWidth="89.0" styleClass="Button2" text="Search" />
+                        <JFXTextField fx:id="fieldIDs" alignment="CENTER" layoutX="7.0" layoutY="16.0" onKeyPressed="#searchActionK" prefHeight="37.0" prefWidth="177.0" promptText=" Employee's ID" style="-fx-border-color: blue; -fx-border-radius: 13px; -jfx-focus-color: white; -jfx-unfocus-color: white; -fx-border-width: 0.3;" styleClass="TextField" />
+                        <JFXButton layoutX="202.0" layoutY="14.0" onMouseClicked="#searchActionM" prefHeight="37.0" prefWidth="89.0" styleClass="Button2" text="Search" />
                         <Label fx:id="warningSearch" layoutX="314.0" layoutY="11.0" prefHeight="45.0" prefWidth="77.0" textFill="#d73535" wrapText="true">
                            <font>
                               <Font size="13.0" />

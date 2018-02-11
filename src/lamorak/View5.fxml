@@ -14,36 +14,6 @@
 
 <JFXTabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" styleClass="AnchorPane" stylesheets="@weirdEffects.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lamorak.View5Controller">
    <tabs>
-      <Tab styleClass="tab2" text="History Log">
-        <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="700.0">
-               <children>
-                  <Pane layoutX="16.0" layoutY="180.0" prefHeight="262.0" prefWidth="668.0" styleClass="regionN">
-                     <children>
-                        <TableView fx:id="tt" editable="true" layoutX="10.0" layoutY="9.0" prefHeight="244.0" prefWidth="651.0">
-                           <columns>
-                              <TableColumn fx:id="C1" prefWidth="122.0" resizable="false" text="ID" />
-                              <TableColumn fx:id="C2" prefWidth="168.0" resizable="false" text="Name" />
-                              <TableColumn fx:id="C3" prefWidth="222.0" resizable="false" text="Date" />
-                              <TableColumn fx:id="C4" minWidth="0.0" prefWidth="129.0" resizable="false" text="Status" />
-                           </columns>
-                        </TableView>
-                     </children>
-                  </Pane>
-                  <Pane layoutX="476.0" layoutY="14.0" prefHeight="152.0" prefWidth="210.0" styleClass="regionN">
-                     <children>
-                        <JFXTextField fx:id="fieldIDs" labelFloat="true" layoutX="7.0" layoutY="31.0" prefHeight="37.0" prefWidth="177.0" promptText="User's ID/Name" styleClass="TextField" />
-                        <JFXButton layoutX="11.0" layoutY="105.0" onAction="#searchAction" prefHeight="37.0" prefWidth="89.0" styleClass="Button" text="Search" />
-                        <Label fx:id="warningSearch" layoutX="114.0" layoutY="101.0" prefHeight="42.0" prefWidth="89.0" text="Something went wrong!" textFill="#e84646" wrapText="true">
-                           <font>
-                              <Font name="Footlight MT Light" size="16.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </Pane>
-               </children></AnchorPane>
-        </content>
-      </Tab>
       <Tab styleClass="tab2" text="Local">
          <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
@@ -80,6 +50,36 @@
                   </Pane>
                </children></AnchorPane>
          </content>
+      </Tab>
+      <Tab styleClass="tab2" text="History Log">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="700.0">
+               <children>
+                  <Pane layoutX="16.0" layoutY="180.0" prefHeight="262.0" prefWidth="668.0" styleClass="regionN">
+                     <children>
+                        <TableView fx:id="tt" editable="true" layoutX="10.0" layoutY="9.0" prefHeight="244.0" prefWidth="651.0">
+                           <columns>
+                              <TableColumn fx:id="C1" prefWidth="122.0" resizable="false" text="ID" />
+                              <TableColumn fx:id="C2" prefWidth="168.0" resizable="false" text="Name" />
+                              <TableColumn fx:id="C3" prefWidth="222.0" resizable="false" text="Date" />
+                              <TableColumn fx:id="C4" minWidth="0.0" prefWidth="129.0" resizable="false" text="Status" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </Pane>
+                  <Pane layoutX="476.0" layoutY="14.0" prefHeight="152.0" prefWidth="210.0" styleClass="regionN">
+                     <children>
+                        <JFXTextField fx:id="fieldIDs" labelFloat="true" layoutX="7.0" layoutY="31.0" prefHeight="37.0" prefWidth="177.0" promptText="User's ID/Name" styleClass="TextField" />
+                        <JFXButton layoutX="11.0" layoutY="105.0" onAction="#searchAction" prefHeight="37.0" prefWidth="89.0" styleClass="Button" text="Search" />
+                        <Label fx:id="warningSearch" layoutX="114.0" layoutY="101.0" prefHeight="42.0" prefWidth="89.0" textFill="#e84646" wrapText="true">
+                           <font>
+                              <Font name="Footlight MT Light" size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+               </children></AnchorPane>
+        </content>
       </Tab>
    </tabs>
 </JFXTabPane>

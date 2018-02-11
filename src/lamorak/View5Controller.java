@@ -151,7 +151,7 @@ public class View5Controller extends TabPane implements Initializable {
                 historyList.add(hs);
                 }
             }
-            
+            System.out.println("noothing");
             C1.setCellValueFactory(cellData -> cellData.getValue().getNameProp());
             C2.setCellValueFactory(cellData -> cellData.getValue().getIdProp().asObject());
             C3.setCellValueFactory(cellData -> cellData.getValue().getDateProp());

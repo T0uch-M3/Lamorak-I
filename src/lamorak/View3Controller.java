@@ -86,7 +86,10 @@ public class View3Controller extends AnchorPane implements Initializable{
             Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2500), actionevent -> {
                 addingDone.setText(" ");
                 try{
-                m.goto1();
+                    if (Main.lastWindow=="normalUser")
+                        m.goto1();
+                    if(Main.lastWindow=="superUser")
+                        m.goto4();
                 }catch(Exception ex){
                         
                 }}));
@@ -97,7 +100,7 @@ public class View3Controller extends AnchorPane implements Initializable{
             exc.printStackTrace();
         }
     }
-        @FXML
+    @FXML
     private void unfocusAll (MouseEvent me){
         ppane.requestFocus();
         ppane1.requestFocus();

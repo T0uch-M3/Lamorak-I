@@ -52,8 +52,6 @@ public class View1Controller extends AnchorPane implements Initializable{
     private Label confirmWarning;
     @FXML
     private CheckBox rememberBox;
-    @FXML
-    private JFXDrawer drawer;
     public static String currentName, currentId;
     @FXML
     private void moveNext(KeyEvent ke){

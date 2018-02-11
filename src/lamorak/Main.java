@@ -34,7 +34,7 @@ public class Main extends Application {
     @Override 
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
-        stage.setTitle("Lamorak");
+        stage.setTitle("Managment Software");
         stage.setMinWidth(700);
         stage.setMinHeight(500);
         Parent root = FXMLLoader.load(getClass().getResource("View1.fxml"));
@@ -67,25 +67,34 @@ public class Main extends Application {
         }
     };
     
-
+    //the login screen
     public void goto1() throws Exception{
         Parent pane = FXMLLoader.load(getClass().getResource("View1.fxml"));
         stage.getScene().setRoot(pane);
     }
+    //the main screen
     public void goto2() throws Exception{
         Parent pane = FXMLLoader.load(getClass().getResource("View2N.fxml"));
         stage.getScene().setRoot(pane);
     }
+    //adding users screen
     public void goto3() throws Exception{
        Parent pane = FXMLLoader.load(getClass().getResource("View3.fxml"));
        stage.getScene().setRoot(pane);
     }
+    //manager's login screen
     public void goto4() throws Exception{
        Parent pane = FXMLLoader.load(getClass().getResource("View4.fxml"));
        stage.getScene().setRoot(pane);
     }
+    //manager's screen
     public void goto5() throws Exception{
        Parent pane = FXMLLoader.load(getClass().getResource("View5.fxml"));
        stage.getScene().setRoot(pane);
+    }
+    //password changing screen
+    public void goto6() throws Exception{
+        Parent pane = FXMLLoader.load(getClass().getResource("View6.fxml"));
+        stage.getScene().setRoot(pane);
     }
 }

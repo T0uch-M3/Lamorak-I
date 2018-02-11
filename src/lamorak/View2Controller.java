@@ -135,7 +135,20 @@ public class View2Controller extends TabPane implements Initializable{
         m.goto1();
     }
     @FXML
-    public void searchAction(ActionEvent event){
+    private void searchActionM(MouseEvent ae){
+        if (ae.getButton()==ae.getButton().PRIMARY){
+            startSearch();
+        }
+    }
+    @FXML 
+    private void searchActionK(KeyEvent ke){
+        if (ke.getCode()== ke.getCode().ENTER){
+            startSearch();
+        }
+    }
+    @FXML
+    public void startSearch(){
+        System.out.println("FUKKKKKKKKKKKK");
         try{
             historyList = FXCollections.observableArrayList();
             String sqlS = "select * from HISTORY where TYPE = 'E'";
@@ -333,7 +346,7 @@ public class View2Controller extends TabPane implements Initializable{
         st.setString(1, fieldNAMEc.getText());
         if (matBox.isSelected()){
             //add 2 months to the current flow 
-            st.setInt(2, Integer.valueOf(labMat.getText()+2));
+            st.setInt(2, Integer.valueOf(labMat.getText())+2);
             checked=true;
         }
         else{
@@ -737,6 +750,11 @@ public class View2Controller extends TabPane implements Initializable{
         Main m = new Main();
         addingLog("Left");
         m.goto1();
+    }
+    @FXML
+    private void gotoPassword(ActionEvent ace) throws Exception{
+        Main main = new Main();
+        main.goto6();
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {

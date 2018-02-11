@@ -44,17 +44,17 @@
 
 
 .JFXComboBox{
-    -fx-prompt-text-fill : #878787;
-    -fx-text-fill: #c2c2c2;
-    -fx-text-inner-color:#c2c2c2;
+    -fx-prompt-text-fill : #838383;
+    -fx-text-fill: #404040;
+    -fx-text-inner-color:#404040;
     -jfx-focus-color: #7553b5;
     -jfx-unfocus-color: #9571d8;
     -fx-font-family: "Footlight MT Light";
-    -fx-font-size : 17px;
+    -fx-font-size : 16px;
 }
 .JFXComboBox :selected{
 
-    -fx-text-fill: #c2c2c2;
+    -fx-text-fill: #404040;
 
 }
 
