@@ -148,8 +148,8 @@ public class View2Controller extends TabPane implements Initializable{
     }
     @FXML
     public void startSearch(){
-        System.out.println("FUKKKKKKKKKKKK");
         try{
+            tt.getItems().clear();
             historyList = FXCollections.observableArrayList();
             String sqlS = "select * from HISTORY where TYPE = 'E'";
             PreparedStatement Pstat = cn.prepareStatement(sqlS);
@@ -173,7 +173,7 @@ public class View2Controller extends TabPane implements Initializable{
             tt.setItems(historyList);
         
         }catch(SQLException ex){
-            warningSearch.setText("Somethig went wrong!");
+            warningSearch.setText("Something went wrong!");
             ex.printStackTrace();
             Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2500),
                     ActionEvent -> warningSearch.setText("  ")));

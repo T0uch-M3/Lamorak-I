@@ -46,21 +46,35 @@ public class View4Controller extends AnchorPane implements Initializable{
     PreparedStatement st = null;
     Main m = new Main();
     @FXML
-    private void goBack(ActionEvent ae) throws Exception{
+    private void goBack() throws Exception{
         m.goto1();
+    }
+    @FXML
+    private void goBackA(ActionEvent ae) throws Exception{
+        goBack();
+    }
+    @FXML
+    private void goBackK(KeyEvent ke) throws Exception{
+        if (ke.getCode()== ke.getCode().F1)
+        goBack();
     }
     @FXML
     private void gotoNewUser(ActionEvent ae) throws Exception{
         m.goto3();
     }
         @FXML
-    private void moveNext(KeyEvent ke){
+    private void moveNext(KeyEvent ke) throws Exception{
          if (ke.getCode()== ke.getCode().ENTER){
-        if (name.isFocused())
-            password.requestFocus();
-        else if (password.isFocused())
-            confirmBut.requestFocus();
+            if (name.isFocused()){
+                password.requestFocus();
+                ke.consume();
+            }
+            else if (password.isFocused())
+                confirmBut.requestFocus();
+                confirmBut.setDefaultButton(true);
          }
+         if(ke.getCode()== ke.getCode().F1)
+             goBack();
     }
     @FXML
     private void move() throws Exception{

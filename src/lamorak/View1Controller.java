@@ -5,7 +5,6 @@
  */
 package lamorak;
 
-import com.jfoenix.controls.JFXDrawer;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -36,6 +35,8 @@ import javafx.util.Duration;
  */
 public class View1Controller extends AnchorPane implements Initializable{
     
+    Connection con;
+    boolean warOn=true;
     boolean init = false;
     PreparedStatement st = null;
     String sql1 = "SELECT * FROM USERS";
@@ -54,42 +55,64 @@ public class View1Controller extends AnchorPane implements Initializable{
     private CheckBox rememberBox;
     public static String currentName, currentId;
     @FXML
-    private void moveNext(KeyEvent ke){
+    private void moveNext(KeyEvent ke) throws Exception{
          if (ke.getCode()== ke.getCode().ENTER){
-        if (name.isFocused())
+        if (name.isFocused()){
+            if(checkRemember(name.getText()))
+                move();
+            else{
             password.requestFocus();
+            ke.consume();
+            }
+        }
         else if (password.isFocused()){
             confirmBut.requestFocus();
             confirmBut.setDefaultButton(true);
             }
             
          }
+         if (ke.getCode()== ke.getCode().F1)
+             moveSuser();
     }
     @FXML
-    private void moveSuser(ActionEvent ae) throws Exception{
+    private void moveSuserK(KeyEvent ke) throws Exception{
+        if(ke.getCode()==ke.getCode().F1)
+            moveSuser();
+    }
+    @FXML
+    private void moveSuserA(ActionEvent ae) throws Exception{
+        moveSuser();
+    }
+    @FXML
+    private void moveSuser() throws Exception{
         Main m = new Main();
         m.goto4();
     }
     @FXML
     private void ConfirmAction (ActionEvent event) throws Exception{
         try {
-            Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/Project","Test","test");
             st = con.prepareStatement(sql1);
             ResultSet result = st.executeQuery();
             while(result.next()) {
                 if (((result.getString("NAME").equals(name.getText()))||(result.getString("ID").equals(name.getText()))) && result.getString("PWD").equals(password.getText())){
                     if (rememberBox.isSelected())
-                        checkRemember(result.getString("ID"), con, true);
+                        setRemember(result.getString("ID"), con, true);
                     if (!rememberBox.isSelected())
-                        checkRemember(result.getString("ID"), con, false);
+                        setRemember(result.getString("ID"), con, false);
                     move();
 //                    System.out.println(result.getString("NAME"));
                     currentId=result.getString("ID");
                     currentName=result.getString("NAME");
                 }else{
-                    confirmWarning.setText("Something went wrong!");
-                    Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2500), ae -> confirmWarning.setText(" ")));
+                    while(warOn==true){
+                    confirmWarning.setText("Wrong informations");
+                    warOn=false;
+                    Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2500), ae -> {
+                        confirmWarning.setText(" ");
+                        warOn= true;
+                            }));
                     timeline.play();
+                    }
                 }
             }
         } catch (SQLException ex){
@@ -100,13 +123,12 @@ public class View1Controller extends AnchorPane implements Initializable{
         }
     }
     @FXML
-    private void checkRemember(String id, Connection cn, boolean boo) throws SQLException{
+    private void setRemember(String id, Connection cn, boolean boo) throws SQLException{
         String sql4 = "UPDATE USERS set REMEMBER = ? where ID = ?";
         PreparedStatement ps = cn.prepareStatement(sql4);
         ps.setString(2, id);
         ps.setBoolean(1, boo);
         int nbr = ps.executeUpdate();
-        
     }
     private void move() throws Exception{
         Main m = new Main();
@@ -121,12 +143,29 @@ public class View1Controller extends AnchorPane implements Initializable{
     private void unfocusAll (MouseEvent me){
         ppane.requestFocus();
     }
+    @FXML
+    private boolean checkRemember(String in){
+        try{
+        String sql4= "SELECT * FROM USERS where ID=? or Name=?";
+        PreparedStatement pstat= con.prepareStatement(sql4);
+        pstat.setString(1, in);
+        pstat.setString(2, in);
+        ResultSet result = pstat.executeQuery();
+        result.next();
+        if(result.getBoolean("REMEMBER"))
+            return true;
+        else
+            return false;
+        }catch(SQLException ex){
+//            ex.printStackTrace();
+            return false;
+        }
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources)  {
         try{
+            con = DriverManager.getConnection("jdbc:derby://localhost:1527/Project","Test","test");
             String sql2 = "SELECT * from USERS where TYPE = 'N'";
-        
-            Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/Project","Test","test");
             st = con.prepareStatement(sql2);
             ResultSet result = st.executeQuery();
         
@@ -158,5 +197,4 @@ public class View1Controller extends AnchorPane implements Initializable{
             //****************************
             Main.lastWindow="normalUser";
     }
-    
 }

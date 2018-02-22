@@ -11,6 +11,7 @@ and open the template in the editor.
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.effect.Glow?>
 <?import javafx.scene.effect.Shadow?>
 <?import javafx.scene.image.Image?>
@@ -19,7 +20,7 @@ and open the template in the editor.
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="ppane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#unfocusAll" prefHeight="500.0" prefWidth="700.0" styleClass="AnchorPane" stylesheets="@weirdEffects.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lamorak.View1Controller">
+<AnchorPane fx:id="ppane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#moveSuserK" onMouseClicked="#unfocusAll" prefHeight="500.0" prefWidth="700.0" styleClass="AnchorPane" stylesheets="@weirdEffects.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lamorak.View1Controller">
    <children>
       <JFXButton fx:id="newUserBut" buttonType="RAISED" layoutX="538.0" layoutY="44.0" onAction="#gotoNewUser" prefHeight="25.0" prefWidth="224.0" ripplerFill="#425b8a" rotate="45.0" style="-fx-background-color: #11F88D;" text="New User !" textFill="#2b2868">
          <font>
@@ -30,7 +31,7 @@ and open the template in the editor.
          <children>
             <JFXButton buttonType="RAISED" disable="true" layoutX="40.0" layoutY="-6.0" prefHeight="181.0" prefWidth="226.0" ripplerFill="#80808048" text="  ">
                <graphic>
-                  <ImageView fx:id="imageview1" depthTest="ENABLE" fitHeight="170.0" fitWidth="187.0" focusTraversable="true" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="imageview1" depthTest="ENABLE" fitHeight="170.0" fitWidth="175.0" focusTraversable="true" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@icon_user.png" />
                      </image>
@@ -57,10 +58,17 @@ and open the template in the editor.
                <effect>
                   <Glow level="0.47" />
                </effect>
+               <tooltip>
+                  <Tooltip text="If you want to save time next time you login">
+                     <font>
+                        <Font name="Footlight MT Light" size="11.0" />
+                     </font>
+                  </Tooltip>
+               </tooltip>
             </JFXCheckBox>
             <Label fx:id="confirmWarning" layoutX="40.0" layoutY="311.0" prefHeight="62.0" prefWidth="92.0" textFill="#ff4c4c" wrapText="true">
                <font>
-                  <Font name="Footlight MT Light" size="18.0" />
+                  <Font name="Footlight MT Light" size="17.0" />
                </font>
             </Label>
          </children>
@@ -70,10 +78,17 @@ and open the template in the editor.
             <Font name="Footlight MT Light" size="21.0" />
          </font>
       </JFXButton>
-      <JFXButton layoutY="2.0" onAction="#moveSuser" prefHeight="62.0" prefWidth="138.0" ripplerFill="#e1a2ff00" text="Managing Users" textFill="#d54aff" underline="true">
+      <JFXButton layoutY="2.0" onAction="#moveSuserA" onKeyPressed="#moveSuserK" prefHeight="62.0" prefWidth="138.0" ripplerFill="#e1a2ff00" text="Managing Users" textFill="#d54aff" underline="true">
          <font>
             <Font name="Footlight MT Light" size="16.0" />
          </font>
+         <tooltip>
+            <Tooltip text="Cllick or &quot;BackSpace&quot; to go to the manager's login screen">
+               <font>
+                  <Font name="Footlight MT Light" size="11.0" />
+               </font>
+            </Tooltip>
+         </tooltip>
       </JFXButton>
       <Label layoutX="11.0" layoutY="458.0" opacity="0.5" prefHeight="38.0" prefWidth="268.0" styleClass="Label" text="Kebili Regional Hospital" />
    </children>

@@ -90,7 +90,10 @@
                         <JFXComboBox fx:id="fm" labelFloat="true" layoutX="224.0" layoutY="143.0" prefHeight="28.0" prefWidth="75.0" promptText="F/M" styleClass="JFXComboBox" />
                         <JFXDatePicker fx:id="fieldDATE" defaultColor="#74cf77" layoutX="16.0" layoutY="218.0" prefHeight="38.0" prefWidth="201.0" promptText="In Date" styleClass="TextField">
                            <tooltip>
-                              <Tooltip text="This can be the date the employee started working or the date that he got into the app database" />
+                              <Tooltip text="This can be the date the employee started working or the date that he got into the app database" wrapText="true">
+                                 <font>
+                                    <Font name="Footlight MT Light" size="11.0" />
+                                 </font></Tooltip>
                            </tooltip>
                         </JFXDatePicker>
                      </children>

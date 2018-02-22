@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.image.Image?>
@@ -10,19 +11,22 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" styleClass="AnchorPane" stylesheets="@weirdEffects.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lamorak.View4Controller">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#goBackK" prefHeight="500.0" prefWidth="700.0" styleClass="AnchorPane" stylesheets="@weirdEffects.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lamorak.View4Controller">
    <children>
-      <Pane layoutX="214.0" layoutY="64.0" prefHeight="393.0" prefWidth="293.0" styleClass="regionN">
+      <Pane layoutX="204.0" layoutY="54.0" prefHeight="393.0" prefWidth="293.0" styleClass="regionN">
          <children>
             <JFXButton buttonType="RAISED" disable="true" layoutX="40.0" layoutY="-6.0" prefHeight="181.0" prefWidth="226.0" ripplerFill="#80808048" text="  ">
                <graphic>
-                  <ImageView fx:id="imageview1" depthTest="ENABLE" fitHeight="170.0" fitWidth="187.0" focusTraversable="true" pickOnBounds="true">
+                  <ImageView fx:id="imageview1" depthTest="ENABLE" fitHeight="170.0" fitWidth="175.0" focusTraversable="true" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@icon_user.png" />
                      </image>
                      <effect>
                         <ColorAdjust brightness="0.33" contrast="0.1" hue="-0.45" saturation="1.0" />
                      </effect>
+                     <viewport>
+                        <Rectangle2D />
+                     </viewport>
                   </ImageView>
                </graphic>
             </JFXButton>
@@ -49,14 +53,14 @@
                   <ColorAdjust brightness="0.38" saturation="0.86" />
                </effect>
             </ImageView>
-            <Label fx:id="confirmWarning" layoutX="54.0" layoutY="331.0" prefHeight="62.0" prefWidth="185.0" textFill="#ff4c4c">
+            <Label fx:id="confirmWarning" layoutX="49.0" layoutY="317.0" prefHeight="62.0" prefWidth="201.0" textFill="#ff4c4c">
                <font>
                   <Font name="Footlight MT Light" size="18.0" />
                </font>
             </Label>
          </children>
       </Pane>
-      <JFXButton fx:id="confirmBut" defaultButton="true" layoutX="566.0" layoutY="435.0" onAction="#confirmAction" prefHeight="40.0" prefWidth="118.0" ripplerFill="#ffffff00" styleClass="Button" text="Confirm" textFill="WHITE">
+      <JFXButton fx:id="confirmBut" layoutX="566.0" layoutY="435.0" onAction="#confirmAction" prefHeight="40.0" prefWidth="118.0" ripplerFill="#ffffff00" styleClass="Button" text="Confirm" textFill="WHITE">
          <font>
             <Font name="Footlight MT Light" size="21.0" />
          </font>
@@ -66,7 +70,7 @@
             <Font name="Footlight MT Light" size="21.0" />
          </font>
       </JFXButton>
-      <JFXButton contentDisplay="RIGHT" layoutX="587.0" layoutY="-1.0" onAction="#goBack" prefHeight="49.0" prefWidth="121.0" ripplerFill="#c6c6c6" text="Go back" textFill="#8c8b8d">
+      <JFXButton contentDisplay="RIGHT" layoutX="587.0" layoutY="-1.0" onAction="#goBackA" onKeyPressed="#goBackK" prefHeight="49.0" prefWidth="121.0" ripplerFill="#c6c6c6" text="Go back" textFill="#8c8b8d">
          <font>
             <Font name="Footlight MT Light" size="16.0" />
          </font>

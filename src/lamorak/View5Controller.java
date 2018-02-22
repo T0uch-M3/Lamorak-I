@@ -59,6 +59,7 @@ public class View5Controller extends TabPane implements Initializable {
     @FXML
     private ListView<History>listV;
     //====RANDOMVARIABLES====
+    boolean exist;
     ObservableList<History> historyList= FXCollections.observableArrayList();
     ObservableList<User> userList= FXCollections.observableArrayList();
 //    ListView<History>listV = new ListView<>(historyList);
@@ -133,8 +134,23 @@ public class View5Controller extends TabPane implements Initializable {
         }
     }
     @FXML
-    public void searchAction(ActionEvent event){
+    private void searchA(ActionEvent ae){
+        startSearch();
+        ae.consume();
+    }
+    @FXML
+    private void searchK(KeyEvent ke){
+        if (ke.getCode()==ke.getCode().ENTER){
+        startSearch();
+        ke.consume();
+        }
+        
+    }
+    @FXML
+    public void startSearch(){
+        exist=false;
         try{
+            tt.getItems().clear();
             Connection cn = DriverManager.getConnection("jdbc:derby://localhost:1527/Project","Test","test");
 //            historyList = FXCollections.observableArrayList();
             String sqlS = "select * from HISTORY where TYPE = 'U'";
@@ -149,9 +165,14 @@ public class View5Controller extends TabPane implements Initializable {
                 hs.setTime(result.getTime(2));
                 hs.setReason(result.getString(4));
                 historyList.add(hs);
+                exist=true;
                 }
             }
-            System.out.println("noothing");
+            if (!exist){
+                warningSearch.setText("No result found");
+                Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1200), acev -> warningSearch.setText(" ")));
+                timeline.play();
+            }
             C1.setCellValueFactory(cellData -> cellData.getValue().getNameProp());
             C2.setCellValueFactory(cellData -> cellData.getValue().getIdProp().asObject());
             C3.setCellValueFactory(cellData -> cellData.getValue().getDateProp());

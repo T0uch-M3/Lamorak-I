@@ -69,8 +69,8 @@
                   </Pane>
                   <Pane layoutX="476.0" layoutY="14.0" prefHeight="152.0" prefWidth="210.0" styleClass="regionN">
                      <children>
-                        <JFXTextField fx:id="fieldIDs" labelFloat="true" layoutX="7.0" layoutY="31.0" prefHeight="37.0" prefWidth="177.0" promptText="User's ID/Name" styleClass="TextField" />
-                        <JFXButton layoutX="11.0" layoutY="105.0" onAction="#searchAction" prefHeight="37.0" prefWidth="89.0" styleClass="Button" text="Search" />
+                        <JFXTextField fx:id="fieldIDs" labelFloat="true" layoutX="7.0" layoutY="31.0" onKeyPressed="#searchK" prefHeight="37.0" prefWidth="177.0" promptText="User's ID/Name" styleClass="TextField" />
+                        <JFXButton layoutX="11.0" layoutY="105.0" onAction="#searchA" prefHeight="37.0" prefWidth="89.0" styleClass="Button" text="Search" />
                         <Label fx:id="warningSearch" layoutX="114.0" layoutY="101.0" prefHeight="42.0" prefWidth="89.0" textFill="#e84646" wrapText="true">
                            <font>
                               <Font name="Footlight MT Light" size="16.0" />
