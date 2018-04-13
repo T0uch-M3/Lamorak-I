@@ -7,7 +7,6 @@ package lamorak;
 
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXRadioButton;
-import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.Date;
@@ -29,9 +28,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import static javafx.event.Event.ANY;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Spinner;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
@@ -39,7 +36,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.Tab;
@@ -55,8 +51,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 /**
  *
@@ -64,7 +58,7 @@ import javafx.util.Duration;
  */
 public class View2Controller extends TabPane implements Initializable{
     @FXML
-    private Label labMat,labPM,labDATE,labY,labM,labD,warningID,warningName,warningUpd,updDone,warningSearch,addDone;
+    private Label labMat,labPM,labDATE,labY,labM,labD,warningID,warningName,warningUpd,updDone,warningSearch,addDone, deleteDone;
     @FXML
     private TableView tt;
     @FXML
@@ -199,6 +193,14 @@ public class View2Controller extends TabPane implements Initializable{
             st.setDate(6, Date.valueOf(LocalDate.now()));
             st.executeUpdate();
             addDone.setText("Successfully added!");
+            
+            Timeline tm = new Timeline(new KeyFrame(Duration.millis(2000), ev -> addDone.setText(null)));
+            tm.play();
+            fieldID.clear();
+            fieldNAME.clear();
+            fieldDATE.setValue(null);
+            fm.setValue(null);
+            
         } catch (SQLException ex) {
             Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2500), AE -> addDone.setText("  ")));
             timeline.play();
@@ -340,7 +342,7 @@ public class View2Controller extends TabPane implements Initializable{
         st = cn.prepareStatement(sql2);
         //****************2/4/6 vac for PMAT
         Integer x = new Integer(labPM.getText());
-        //========just before the update happe, a log get created============================
+        //========just before the update happen, a log get created============================
         makeHistory(fieldIDc.getText(),fieldNAMEc.getText(),checked, x, (int)svf1.getValue());
         
         st.setString(1, fieldNAMEc.getText());
@@ -360,6 +362,8 @@ public class View2Controller extends TabPane implements Initializable{
         st.setString(7, fieldIDc.getText());
         
         int exupdt = st.executeUpdate();
+        
+        init();
         
         updDone.setText("Done");
         Timeline timeline = new Timeline(new KeyFrame(
@@ -384,10 +388,44 @@ public class View2Controller extends TabPane implements Initializable{
             fieldPWDc.setEditable(true);
     }
     
-//    fieldNAMEc.setOnMouseClicked((MouseEvent me) -> {
-//        System.out.println("zzzz");
-//        me.consume();
-//    });
+
+    @FXML
+    private void removeAction(ActionEvent event){
+        try{
+            String sqlD = "DELETE FROM EMPLOYEE WHERE ID = ?";
+            
+            PreparedStatement preS = cn.prepareStatement(sqlD);
+            
+            preS.setString(1, fieldIDc.getText());
+            
+            preS.executeUpdate();
+            init();
+            deleteDone.setText("Deleted");
+            Timeline timeline = new Timeline(new KeyFrame(
+            Duration.millis(2500), ActionEvent -> deleteDone.setText("  ")));
+            timeline.play();
+            }catch(SQLException exe){
+                exe.printStackTrace();
+            }
+    }
+    
+    private void init(){
+        fieldIDc.setText(null);
+        fieldNAMEc.setText(null);
+        labDATE.setText(null);
+        labD.setText(null);
+        labM.setText(null);
+        labY.setText(null);
+        svf1.setValue(0);
+        svf2.setValue(0);
+        svf21.setValue(0);
+        svf22.setValue(0);
+        labMat.setText("0");
+        matBox.setSelected(false);
+        labPM.setText("0");
+        tg.selectToggle(null);
+        
+    }
     //**************************************************************
     @FXML
     private void InitRadioButton(int x){
