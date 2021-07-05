@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package lamorak;
+package LM;
 
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXRadioButton;
