@@ -90,6 +90,6 @@ and open the template in the editor.
             </Tooltip>
          </tooltip>
       </JFXButton>
-      <Label layoutX="11.0" layoutY="458.0" opacity="0.5" prefHeight="38.0" prefWidth="268.0" styleClass="Label" text="Kebili Regional Hospital" />
+      <Label layoutX="11.0" layoutY="458.0" opacity="0.5" prefHeight="38.0" prefWidth="268.0" styleClass="Label" text="Regional  Hospital" />
    </children>
 </AnchorPane>

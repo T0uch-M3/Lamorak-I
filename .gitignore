@@ -11,3 +11,33 @@ nbactions.xml
 
 
 # End of https://www.gitignore.io/api/netbeans
+
+db-derby/
+
+tes\.bat
+
+src/lamorak/back_arrow\.png
+
+src/lamorak/down-arrow\.png
+
+src/lamorak/exit\.png
+
+src/lamorak/icon_user\.png
+
+src/lamorak/next\.png
+
+src/lamorak/out\.png
+
+src/lamorak/padlock\.png
+
+src/lamorak/right-arrow\.png
+
+src/lamorak/star\.png
+
+Source/lib/
+
+Source/Start\.bat
+
+Source/Lamorak\.jar
+
+Source/README\.TXT

@@ -137,15 +137,15 @@
                   <JFXButton fx:id="upd" alignment="CENTER" layoutX="557.0" layoutY="379.0" onAction="#updateAction" prefHeight="44.0" prefWidth="95.0" styleClass="Button" text="Update" />
                   <Pane layoutX="358.0" layoutY="46.0" prefHeight="305.0" prefWidth="327.0" styleClass="regionN">
                      <children>
-                        <Label layoutX="8.0" layoutY="232.0" styleClass="Label" text="Post Maternité" />
+                        <Label layoutX="8.0" layoutY="232.0" styleClass="Label" text="Post-partum" />
                         <JFXCheckBox fx:id="matBox" checkedColor="#49bc26" layoutX="212.0" layoutY="161.0" text="2 Months" textFill="#ff9b00">
                            <font>
                               <Font name="Footlight MT Light" size="18.0" />
                            </font>
                         </JFXCheckBox>
                         <Label fx:id="labMat" layoutX="183.0" layoutY="162.0" styleClass="Label-small" text="0" underline="true" />
-                        <Label layoutX="12.0" layoutY="157.0" styleClass="Label" text="Maternité ::" />
-                        <Label layoutX="11.0" layoutY="114.0" styleClass="Label" text="6 Days Vacation" />
+                        <Label layoutX="12.0" layoutY="157.0" styleClass="Label" text="Maternity " />
+                        <Label layoutX="11.0" layoutY="114.0" styleClass="Label" text="X Days Vacation" />
                         <TilePane fx:id="tp6D" layoutX="211.0" layoutY="109.0" prefHeight="29.0" prefWidth="97.0">
                            <padding>
                               <Insets top="6.0" />

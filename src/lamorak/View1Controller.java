@@ -29,14 +29,16 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
+
 /**
  *
  * @author Touch-Me
  */
-public class View1Controller extends AnchorPane implements Initializable{
-    
+public class View1Controller extends AnchorPane implements Initializable
+{
+
     Connection con;
-    boolean warOn=true;
+    boolean warOn = true;
     boolean init = false;
     PreparedStatement st = null;
     String sql1 = "SELECT * FROM USERS";
@@ -54,147 +56,210 @@ public class View1Controller extends AnchorPane implements Initializable{
     @FXML
     private CheckBox rememberBox;
     public static String currentName, currentId;
+
     @FXML
-    private void moveNext(KeyEvent ke) throws Exception{
-         if (ke.getCode()== ke.getCode().ENTER){
-        if (name.isFocused()){
-            if(checkRemember(name.getText()))
-                move();
-            else{
-            password.requestFocus();
-            ke.consume();
+    private void moveNext(KeyEvent ke) throws Exception
+    {
+        if (ke.getCode() == ke.getCode().ENTER)
+        {
+            if (name.isFocused())
+            {
+                if (checkRemember(name.getText()))
+                {
+                    move();
+                }
+                else
+                {
+                    password.requestFocus();
+                    ke.consume();
+                }
             }
+            else if (password.isFocused())
+            {
+                confirmBut.requestFocus();
+                confirmBut.setDefaultButton(true);
+            }
+
         }
-        else if (password.isFocused()){
-            confirmBut.requestFocus();
-            confirmBut.setDefaultButton(true);
-            }
-            
-         }
-         if (ke.getCode()== ke.getCode().F1)
-             moveSuser();
-    }
-    @FXML
-    private void moveSuserK(KeyEvent ke) throws Exception{
-        if(ke.getCode()==ke.getCode().F1)
+        if (ke.getCode() == ke.getCode().F1)
+        {
             moveSuser();
+        }
     }
+
     @FXML
-    private void moveSuserA(ActionEvent ae) throws Exception{
+    private void moveSuserK(KeyEvent ke) throws Exception
+    {
+        if (ke.getCode() == ke.getCode().F1)
+        {
+            moveSuser();
+        }
+    }
+
+    @FXML
+    private void moveSuserA(ActionEvent ae) throws Exception
+    {
         moveSuser();
     }
+
     @FXML
-    private void moveSuser() throws Exception{
+    private void moveSuser() throws Exception
+    {
         Main m = new Main();
         m.goto4();
     }
+
     @FXML
-    private void ConfirmAction (ActionEvent event) throws Exception{
-        try {
+    private void ConfirmAction(ActionEvent event) throws Exception
+    {
+        try
+        {
             st = con.prepareStatement(sql1);
             ResultSet result = st.executeQuery();
-            while(result.next()) {
-                if (((result.getString("NAME").equals(name.getText()))||(result.getString("ID").equals(name.getText()))) && result.getString("PWD").equals(password.getText())){
+            while (result.next())
+            {
+                if (((result.getString("NAME").equals(name.getText())) || (result.getString("ID").equals(name.getText()))) && result.getString("PWD").equals(password.getText()))
+                {
                     if (rememberBox.isSelected())
+                    {
                         setRemember(result.getString("ID"), con, true);
+                    }
                     if (!rememberBox.isSelected())
+                    {
                         setRemember(result.getString("ID"), con, false);
+                    }
                     move();
 //                    System.out.println(result.getString("NAME"));
-                    currentId=result.getString("ID");
-                    currentName=result.getString("NAME");
-                }else{
-                    while(warOn==true){
-                    confirmWarning.setText("Wrong informations");
-                    warOn=false;
-                    Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2500), ae -> {
-                        confirmWarning.setText(" ");
-                        warOn= true;
-                            }));
-                    timeline.play();
+                    currentId = result.getString("ID");
+                    currentName = result.getString("NAME");
+                }
+                else
+                {
+                    while (warOn == true)
+                    {
+                        confirmWarning.setText("Wrong informations");
+                        warOn = false;
+                        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2500), ae ->
+                        {
+                            confirmWarning.setText(" ");
+                            warOn = true;
+                        }));
+                        timeline.play();
                     }
                 }
             }
-        } catch (SQLException ex){
+        }
+        catch (SQLException ex)
+        {
             ex.printStackTrace();
             Logger.getLogger(View1Controller.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
+        }
+        finally
+        {
             st.close();
         }
     }
+
     @FXML
-    private void setRemember(String id, Connection cn, boolean boo) throws SQLException{
+    private void setRemember(String id, Connection cn, boolean boo) throws SQLException
+    {
         String sql4 = "UPDATE USERS set REMEMBER = ? where ID = ?";
         PreparedStatement ps = cn.prepareStatement(sql4);
         ps.setString(2, id);
         ps.setBoolean(1, boo);
         int nbr = ps.executeUpdate();
     }
-    private void move() throws Exception{
+
+    private void move() throws Exception
+    {
         Main m = new Main();
         m.goto2();
     }
+
     @FXML
-    private void gotoNewUser(ActionEvent ae) throws Exception{
+    private void gotoNewUser(ActionEvent ae) throws Exception
+    {
         Main m = new Main();
         m.goto3();
     }
+
     @FXML
-    private void unfocusAll (MouseEvent me){
+    private void unfocusAll(MouseEvent me)
+    {
         ppane.requestFocus();
     }
+
     @FXML
-    private boolean checkRemember(String in){
-        try{
-        String sql4= "SELECT * FROM USERS where ID=? or Name=?";
-        PreparedStatement pstat= con.prepareStatement(sql4);
-        pstat.setString(1, in);
-        pstat.setString(2, in);
-        ResultSet result = pstat.executeQuery();
-        result.next();
-        if(result.getBoolean("REMEMBER"))
-            return true;
-        else
-            return false;
-        }catch(SQLException ex){
+    private boolean checkRemember(String in)
+    {
+        try
+        {
+            String sql4 = "SELECT * FROM USERS where ID=? or Name=?";
+            PreparedStatement pstat = con.prepareStatement(sql4);
+            pstat.setString(1, in);
+            pstat.setString(2, in);
+            ResultSet result = pstat.executeQuery();
+            result.next();
+            if (result.getBoolean("REMEMBER"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        catch (SQLException ex)
+        {
 //            ex.printStackTrace();
             return false;
         }
     }
+
     @Override
-    public void initialize(URL location, ResourceBundle resources)  {
-        try{
-            con = DriverManager.getConnection("jdbc:derby://localhost:1527/Project","Test","test");
+    public void initialize(URL location, ResourceBundle resources)
+    {
+        try
+        {
+            con = DriverManager.getConnection("jdbc:derby://localhost:1527/Project", "Test", "test");
             String sql2 = "SELECT * from USERS where TYPE = 'N'";
             st = con.prepareStatement(sql2);
             ResultSet result = st.executeQuery();
-        
-            if (!result.next()) {    
-            newUserBut.setVisible(true);
-            newUserBut.setDisable(false);
-            } 
-            else{
+
+            if (!result.next())
+            {
+                newUserBut.setVisible(true);
+                newUserBut.setDisable(false);
+            }
+            else
+            {
                 newUserBut.setVisible(false);
                 newUserBut.setDisable(true);
-                if( result.getBoolean(4)==true){
+                if (result.getBoolean(4) == true)
+                {
                     rememberBox.setSelected(true);
                     name.setText(result.getString(2));
                     password.setText(result.getString(3));
                     Timeline timeline = new Timeline(new KeyFrame(Duration.millis(500), ae -> confirmBut.requestFocus()));
                     timeline.play();
                 }
-                else{
+                else
+                {
                     rememberBox.setSelected(false);
                     Timeline timeline = new Timeline(new KeyFrame(Duration.millis(500), ae -> name.requestFocus()));
                     timeline.play();
                 }
             }
-            }catch (SQLException ex){
-                ex.printStackTrace();
-            }
-            if (rememberBox.isSelected())
-                confirmBut.setDefaultButton(true);
-            //****************************
-            Main.lastWindow="normalUser";
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        if (rememberBox.isSelected())
+        {
+            confirmBut.setDefaultButton(true);
+        }
+        //****************************
+        Main.lastWindow = "normalUser";
     }
 }
